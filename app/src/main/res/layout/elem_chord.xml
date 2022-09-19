@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/grey"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/textViewHeader"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="22dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginRight="22dp"
+        android:textColor="#FFFFFF"
+        android:textStyle="bold"
+        tools:text="Название" />
+
+    <TextView
+        android:id="@+id/textViewText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="22dp"
+        android:layout_marginRight="22dp"
+        android:textColor="#E0E0E0"
+        android:textStyle="italic"
+        tools:text="Описание" />
+
+    <HorizontalScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="24dp"
+        android:layout_marginRight="24dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="8dp">
+
+            <LinearLayout
+                android:id="@+id/notes"
+                android:layout_width="726dp"
+                android:layout_height="175dp"
+                android:isScrollContainer="true"
+                android:orientation="horizontal"
+                android:visibility="visible"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <Button
+                    android:id="@+id/button1"
+                    style="@style/Widget.ChordAssistant.WhiteKeyButton"
+                    android:text="@string/c_note" />
+
+                <Button
+                    android:id="@+id/button3"
+                    style="@style/Widget.ChordAssistant.WhiteKeyButton"
+                    android:text="@string/d_note" />
+
+                <Button
+                    android:id="@+id/button5"
+                    style="@style/Widget.ChordAssistant.WhiteKeyButton"
+                    android:text="@string/e_note" />
+
+                <Button
+                    android:id="@+id/button6"
+                    style="@style/Widget.ChordAssistant.WhiteKeyButton"
+                    android:text="@string/f_note" />
+
+                <Button
+                    android:id="@+id/button8"
+                    style="@style/Widget.ChordAssistant.WhiteKeyButton"
+                    android:text="@string/g_note" />
+
+                <Button
+                    android:id="@+id/button10"
+                    style="@style/Widget.ChordAssistant.WhiteKeyButton"
+                    android:text="@string/a_note" />
+
+                <Button
+                    android:id="@+id/button12"
+                    style="@style/Widget.ChordAssistant.WhiteKeyButton"
+                    android:text="@string/b_note" />
+
+                <Button
+                    android:id="@+id/button13"
+                    style="@style/Widget.ChordAssistant.WhiteKeyButton"
+                    android:text="@string/c_note" />
+
+                <Button
+                    android:id="@+id/button15"
+                    style="@style/Widget.ChordAssistant.WhiteKeyButton"
+                    android:text="@string/d_note" />
+
+                <Button
+                    android:id="@+id/button17"
+                    style="@style/Widget.ChordAssistant.WhiteKeyButton"
+                    android:text="@string/e_note" />
+
+                <Button
+                    android:id="@+id/button18"
+                    style="@style/Widget.ChordAssistant.WhiteKeyButton"
+                    android:text="@string/f_note" />
+
+                <Button
+                    android:id="@+id/button20"
+                    style="@style/Widget.ChordAssistant.WhiteKeyButton"
+                    android:text="@string/g_note" />
+
+                <Button
+                    android:id="@+id/button22"
+                    style="@style/Widget.ChordAssistant.WhiteKeyButton"
+                    android:text="@string/a_note" />
+
+                <Button
+                    android:id="@+id/button24"
+                    style="@style/Widget.ChordAssistant.WhiteKeyButton"
+                    android:text="@string/b_note" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/flats"
+                android:layout_width="726dp"
+                android:layout_height="175dp"
+                android:orientation="horizontal"
+                android:visibility="visible"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.0">
+
+                <Button
+                    android:id="@+id/button2"
+                    style="@style/Widget.ChordAssistant.BlackKeyButton"
+                    android:layout_marginLeft="30dp"
+                    android:text="@string/db_note"
+                    tools:ignore="RtlHardcoded" />
+
+                <Button
+                    android:id="@+id/button4"
+                    style="@style/Widget.ChordAssistant.BlackKeyButton"
+                    android:layout_marginRight="70dp"
+                    android:text="@string/eb_note"
+                    tools:ignore="RtlHardcoded" />
+
+                <Button
+                    android:id="@+id/button7"
+                    style="@style/Widget.ChordAssistant.BlackKeyButton"
+                    android:text="@string/gb_note" />
+
+                <Button
+                    android:id="@+id/button9"
+                    style="@style/Widget.ChordAssistant.BlackKeyButton"
+                    android:text="@string/ab_note" />
+
+                <Button
+                    android:id="@+id/button11"
+                    style="@style/Widget.ChordAssistant.BlackKeyButton"
+                    android:layout_marginRight="30dp"
+                    android:text="@string/bb_note"
+                    tools:ignore="RtlHardcoded" />
+
+                <Button
+                    android:id="@+id/button14"
+                    style="@style/Widget.ChordAssistant.BlackKeyButton"
+                    android:layout_marginLeft="30dp"
+                    android:text="@string/db_note"
+                    tools:ignore="RtlHardcoded" />
+
+                <Button
+                    android:id="@+id/button16"
+                    style="@style/Widget.ChordAssistant.BlackKeyButton"
+                    android:layout_marginRight="70dp"
+                    android:text="@string/eb_note"
+                    tools:ignore="RtlHardcoded" />
+
+                <Button
+                    android:id="@+id/button19"
+                    style="@style/Widget.ChordAssistant.BlackKeyButton"
+                    android:text="@string/gb_note" />
+
+                <Button
+                    android:id="@+id/button21"
+                    style="@style/Widget.ChordAssistant.BlackKeyButton"
+                    android:text="@string/ab_note" />
+
+                <Button
+                    android:id="@+id/button23"
+                    style="@style/Widget.ChordAssistant.BlackKeyButton"
+                    android:layout_marginRight="30dp"
+                    android:text="@string/bb_note"
+                    tools:ignore="RtlHardcoded" />
+
+            </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </HorizontalScrollView>
+</LinearLayout>

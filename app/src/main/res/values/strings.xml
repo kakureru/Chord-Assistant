@@ -1,0 +1,20 @@
+<resources>
+    <string name="app_name">Chord Assistant</string>
+
+    <string name="title_activity_fullscreen">FullscreenActivity</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
+
+    <string name="c_note">C</string>
+    <string name="db_note">C#</string>
+    <string name="d_note">D</string>
+    <string name="eb_note">D#</string>
+    <string name="e_note">E</string>
+    <string name="f_note">F</string>
+    <string name="gb_note">F#</string>
+    <string name="g_note">G</string>
+    <string name="ab_note">G#</string>
+    <string name="a_note">A</string>
+    <string name="bb_note">A#</string>
+    <string name="b_note">B</string>
+</resources>

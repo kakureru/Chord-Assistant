@@ -1,0 +1,85 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">@color/grey</item>
+        <item name="colorPrimaryDark">@color/grey_dark</item>
+        <item name="android:statusBarColor">@color/grey</item>
+        <item name="colorAccent">@color/green</item>
+    </style>
+
+    <style name="AppTheme.Launcher">
+        <item name="android:windowBackground">@drawable/launch_screen</item>
+        <item name="colorPrimaryDark">@color/grey</item>
+    </style>
+
+    <!-- Buttons -->
+
+    <!-- White key button -->
+    <style name="Widget.ChordAssistant.WhiteKeyButton" parent="Widget.AppCompat.Button">
+        <item name="android:background">@drawable/white_key</item>
+        <item name="android:layout_width">50dp</item>
+        <item name="android:layout_height">170dp</item>
+        <item name="android:layout_marginLeft">1dp</item>
+        <item name="android:layout_marginRight">1dp</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:gravity">bottom|center</item>
+        <item name="android:layout_gravity">bottom</item>
+        <item name="android:paddingBottom">28dp</item>
+        <item name="android:layout_marginBottom">2dp</item>
+    </style>
+
+    <!-- Black key button -->
+    <style name="Widget.ChordAssistant.BlackKeyButton" parent="Widget.AppCompat.Button">
+        <item name="android:background">@drawable/black_key</item>
+        <item name="android:layout_width">50dp</item>
+        <item name="android:layout_height">100dp</item>
+        <item name="android:layout_marginRight">4dp</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:textColor">"#FFFFFF"</item>
+    </style>
+
+    <!-- Tonic button -->
+    <style name="Widget.ChordAssistant.TonicButton" parent="Widget.AppCompat.Button">
+        <item name="android:background">@drawable/rounded_button_disabled</item>
+        <item name="android:layout_width">48dp</item>
+        <item name="android:layout_height">24dp</item>
+        <item name="android:layout_marginLeft">3dp</item>
+        <item name="android:layout_marginTop">6dp</item>
+        <item name="android:layout_marginRight">3dp</item>
+        <item name="android:layout_marginBottom">6dp</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <!-- Switches -->
+
+    <!-- Switch -->
+    <style name="Widget.ChordAssistant.CompoundButton.Switch" parent="Widget.AppCompat.CompoundButton.Switch">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginStart">2dp</item>
+        <item name="android:layout_marginEnd">2dp</item>
+        <item name="android:layout_marginBottom">2dp</item>
+        <item name="android:checked">true</item>
+    </style>
+
+    <!-- Switch 7 -->
+    <style name="Theme.Switch7" parent="Theme.AppCompat.Light">
+        <item name="colorAccent">@color/cyan</item>
+    </style>
+
+    <!-- Switch 9 -->
+    <style name="Theme.Switch9" parent="Theme.AppCompat.Light">
+        <item name="colorAccent">@color/bittersweet</item>
+    </style>
+
+    <!-- Switch 11 -->
+    <style name="Theme.Switch11" parent="Theme.AppCompat.Light">
+        <item name="colorAccent">@color/orange</item>
+    </style>
+
+    <!-- Switch 13 -->
+    <style name="Theme.Switch13" parent="Theme.AppCompat.Light">
+        <item name="colorAccent">@color/blue</item>
+    </style>
+
+</resources>

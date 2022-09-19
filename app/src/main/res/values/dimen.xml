@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="chordCorners">4dp</dimen>
+    <dimen name="keyCorners">3dp</dimen>
+    <dimen name="buttonCorners">6dp</dimen>
+</resources>
