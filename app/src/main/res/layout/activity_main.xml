@@ -25,7 +25,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/gridView"
+            app:layout_constraintTop_toTopOf="@+id/recycler_view"
             app:srcCompat="@drawable/searchbg" />
 
         <HorizontalScrollView
@@ -119,24 +119,18 @@
             </LinearLayout>
         </HorizontalScrollView>
 
-        <GridView
-            android:id="@+id/gridView"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_view"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginTop="8dp"
-            android:columnWidth="70dp"
-            android:gravity="center"
-            android:horizontalSpacing="5dp"
-            android:numColumns="auto_fit"
-            android:stretchMode="columnWidth"
-            android:verticalSpacing="8dp"
             android:visibility="visible"
+            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
             app:layout_constraintBottom_toTopOf="@+id/horizontalScrollView2"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/linearLayout">
-
-        </GridView>
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout"
+            app:spanCount="5" />
 
         <LinearLayout
             android:id="@+id/linearLayout"
@@ -378,8 +372,8 @@
                         android:id="@+id/button4"
                         style="@style/Widget.ChordAssistant.BlackKeyButton"
                         android:layout_marginRight="70dp"
-                        tools:ignore="RtlHardcoded"
-                        android:text="@string/eb_note" />
+                        android:text="@string/eb_note"
+                        tools:ignore="RtlHardcoded" />
 
                     <Button
                         android:id="@+id/button7"
@@ -395,22 +389,22 @@
                         android:id="@+id/button11"
                         style="@style/Widget.ChordAssistant.BlackKeyButton"
                         android:layout_marginRight="30dp"
-                        tools:ignore="RtlHardcoded"
-                        android:text="@string/bb_note" />
+                        android:text="@string/bb_note"
+                        tools:ignore="RtlHardcoded" />
 
                     <Button
                         android:id="@+id/button14"
                         style="@style/Widget.ChordAssistant.BlackKeyButton"
                         android:layout_marginLeft="30dp"
-                        tools:ignore="RtlHardcoded"
-                        android:text="@string/db_note" />
+                        android:text="@string/db_note"
+                        tools:ignore="RtlHardcoded" />
 
                     <Button
                         android:id="@+id/button16"
                         style="@style/Widget.ChordAssistant.BlackKeyButton"
                         android:layout_marginRight="70dp"
-                        tools:ignore="RtlHardcoded"
-                        android:text="@string/eb_note" />
+                        android:text="@string/eb_note"
+                        tools:ignore="RtlHardcoded" />
 
                     <Button
                         android:id="@+id/button19"
@@ -426,22 +420,22 @@
                         android:id="@+id/button23"
                         style="@style/Widget.ChordAssistant.BlackKeyButton"
                         android:layout_marginRight="30dp"
-                        tools:ignore="RtlHardcoded"
-                        android:text="@string/bb_note" />
+                        android:text="@string/bb_note"
+                        tools:ignore="RtlHardcoded" />
 
                     <Button
                         android:id="@+id/button26"
                         style="@style/Widget.ChordAssistant.BlackKeyButton"
                         android:layout_marginLeft="30dp"
-                        tools:ignore="RtlHardcoded"
-                        android:text="@string/db_note" />
+                        android:text="@string/db_note"
+                        tools:ignore="RtlHardcoded" />
 
                     <Button
                         android:id="@+id/button28"
                         style="@style/Widget.ChordAssistant.BlackKeyButton"
                         android:layout_marginRight="70dp"
-                        tools:ignore="RtlHardcoded"
-                        android:text="@string/eb_note" />
+                        android:text="@string/eb_note"
+                        tools:ignore="RtlHardcoded" />
 
                     <Button
                         android:id="@+id/button31"
@@ -457,8 +451,8 @@
                         android:id="@+id/button35"
                         style="@style/Widget.ChordAssistant.BlackKeyButton"
                         android:layout_marginRight="30dp"
-                        tools:ignore="RtlHardcoded"
-                        android:text="@string/bb_note" />
+                        android:text="@string/bb_note"
+                        tools:ignore="RtlHardcoded" />
                 </LinearLayout>
             </androidx.constraintlayout.widget.ConstraintLayout>
         </HorizontalScrollView>

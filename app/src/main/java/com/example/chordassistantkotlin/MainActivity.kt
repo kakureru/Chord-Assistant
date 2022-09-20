@@ -23,6 +23,9 @@ class MainActivity : AppCompatActivity(), CompoundButton.OnCheckedChangeListener
     private enum class Instrument { PIANO, CELLO }
 
     private var instrument = Instrument.PIANO
+    var soundPool: SoundPool? = SoundPool.Builder().setMaxStreams(7).build()
+    private lateinit var pianoSounds: Array<Int>
+    private lateinit var celloSounds: Array<Int>
     private lateinit var binding: ActivityMainBinding
     private var adapter: GridAdapter? = null
     private var searchAdapter: GridAdapter? = null
@@ -36,7 +39,6 @@ class MainActivity : AppCompatActivity(), CompoundButton.OnCheckedChangeListener
     //массив интервалов для поиска аккордов
     private val searchIntervalsArray: ArrayList<Int> = ArrayList()
 
-    var soundPool: SoundPool? = SoundPool.Builder().setMaxStreams(7).build()
     private var isSearchModeOn = false
     private var tonic = 0 //текущая тоника
 
@@ -49,6 +51,9 @@ class MainActivity : AppCompatActivity(), CompoundButton.OnCheckedChangeListener
         findKeys()
         findTonics()
 
+        pianoSounds = SoundDatasource().loadPianoPool(this, soundPool)
+        celloSounds = SoundDatasource().loadCelloPool(this, soundPool)
+
         // Initialize data
         chordsArray = ChordsDataSource().loadChords(
             binding.switch7.isChecked,
@@ -56,12 +61,10 @@ class MainActivity : AppCompatActivity(), CompoundButton.OnCheckedChangeListener
             binding.switch11.isChecked,
             binding.switch13.isChecked
         )
-        val pianoSounds = SoundDatasource().loadPianoPool(this, soundPool)
-        val celloSounds = SoundDatasource().loadCelloPool(this, soundPool)
 
         // создание и установка адаптера таблицы аккордов
-        adapter = GridAdapter(applicationContext, chordsArray)
-        binding.gridView.adapter = adapter
+        adapter = GridAdapter(chordsArray) { position -> onGridItemClick(position) }
+        binding.recyclerView.adapter = adapter
 
         // переключение инструментов
         binding.imageButtonPiano.setOnClickListener { switchToPiano() }
@@ -83,16 +86,6 @@ class MainActivity : AppCompatActivity(), CompoundButton.OnCheckedChangeListener
         binding.imageButtonInfo.setOnClickListener {
             val intent = Intent(this, InfoActivity::class.java)
             startActivity(intent)
-        }
-
-        // показ аккорда
-        binding.gridView.setOnItemClickListener { _, _, position, _ ->
-            clearPianoRoll()
-            if (isSearchModeOn) {
-                searchIntervalsArray.clear()
-                showChord(searchResultArray, position, tonic, pianoSounds, celloSounds)
-            } else
-                showChord(chordsArray, position, tonic, pianoSounds, celloSounds)
         }
 
         //обработка выбора тоники
@@ -149,6 +142,15 @@ class MainActivity : AppCompatActivity(), CompoundButton.OnCheckedChangeListener
         }
     }
 
+    private fun onGridItemClick(position: Int) {
+        clearPianoRoll()
+        if (isSearchModeOn) {
+            searchIntervalsArray.clear()
+            showChord(searchResultArray, position, tonic)
+        } else
+            showChord(chordsArray, position, tonic)
+    }
+
     override fun onCheckedChanged(p0: CompoundButton?, p1: Boolean) {
         chordsArray.clear()
         chordsArray.addAll(
@@ -189,8 +191,8 @@ class MainActivity : AppCompatActivity(), CompoundButton.OnCheckedChangeListener
         binding.lupa.alpha = 0.1f
         isSearchModeOn = true
         clearPianoRoll()
-        searchAdapter = GridAdapter(applicationContext, searchResultArray)
-        binding.gridView.adapter = searchAdapter
+        searchAdapter = GridAdapter(searchResultArray) { position -> onGridItemClick(position) }
+        binding.recyclerView.adapter = searchAdapter
     }
 
     private fun offSearchMode() {
@@ -200,8 +202,8 @@ class MainActivity : AppCompatActivity(), CompoundButton.OnCheckedChangeListener
         binding.lupa.alpha = 0f
         isSearchModeOn = false
         clearPianoRoll()
-        adapter = GridAdapter(applicationContext, chordsArray)
-        binding.gridView.adapter = adapter
+        adapter = GridAdapter(chordsArray) { position -> onGridItemClick(position) }
+        binding.recyclerView.adapter = adapter
     }
 
     private fun switchToPiano() {
@@ -219,9 +221,7 @@ class MainActivity : AppCompatActivity(), CompoundButton.OnCheckedChangeListener
     private fun showChord(
         intervalsArray: MutableList<Chord>,
         position: Int,
-        startNote: Int,
-        pianoSounds: Array<Int>,
-        celloSounds: Array<Int>
+        startNote: Int
     ) {
         var startNote = startNote
         for (i in 0..intervalsArray[position].getInterval().size) {
