@@ -2,19 +2,38 @@ package com.example.chordassistantkotlin
 
 import android.database.sqlite.SQLiteDatabase
 import android.os.Bundle
+import androidx.fragment.app.Fragment
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.ListView
-import androidx.appcompat.app.AppCompatActivity
 import com.example.chordassistantkotlin.adapter.ScrollAdapter
 import com.example.chordassistantkotlin.data.DBHelper
+import com.example.chordassistantkotlin.databinding.FragmentInfoBinding
 import com.example.chordassistantkotlin.model.InfoElem
 
-class InfoActivity : AppCompatActivity() {
+class InfoFragment : Fragment() {
+
+    private var _binding: FragmentInfoBinding? = null
+    private val binding get() = _binding!!
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_info)
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        _binding = FragmentInfoBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         val infoList: ArrayList<InfoElem> = ArrayList(22)
-        val dbHelper = DBHelper(this)
+        val dbHelper = DBHelper(context)
         val database: SQLiteDatabase = dbHelper.writableDatabase
         val cursor = database.query(DBHelper.TABLE_CHORDS, null, null, null, null, null, null)
         if (cursor.moveToFirst()) {
@@ -35,12 +54,7 @@ class InfoActivity : AppCompatActivity() {
         cursor.close()
 
         //создание и установка адаптера списка информации
-        val listView = findViewById<ListView>(R.id.listView)
-        val adapter = ScrollAdapter(applicationContext, infoList)
-        listView.adapter = adapter
-
-        //обработка нажатия кнопки назад
-        val backButton = findViewById<ImageButton>(R.id.imageButtonBack)
-        backButton.setOnClickListener { onBackPressed() }
+        val adapter = ScrollAdapter(context, infoList)
+        binding.listView.adapter = adapter
     }
 }

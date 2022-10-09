@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/chordsFragment">
+
+    <fragment
+        android:id="@+id/chordsFragment"
+        android:name="com.example.chordassistantkotlin.ChordsFragment"
+        android:label="fragment_chords"
+        tools:layout="@layout/fragment_chords" >
+        <action
+            android:id="@+id/action_chordsFragment_to_infoFragment"
+            app:destination="@id/infoFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/infoFragment"
+        android:name="com.example.chordassistantkotlin.InfoFragment"
+        android:label="fragment_info"
+        tools:layout="@layout/fragment_info" >
+        <action
+            android:id="@+id/action_infoFragment_to_chordsFragment"
+            app:destination="@id/chordsFragment"
+            app:popUpTo="@id/chordsFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+</navigation>

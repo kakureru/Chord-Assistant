@@ -20,13 +20,13 @@ class ScrollAdapter(private val context: Context? = null,
         layoutInflater = LayoutInflater.from(context)
         val view: View
         if (array[position].getInterval()[0] == "") {
-            view = layoutInflater.inflate(R.layout.elem_title, null)
+            view = layoutInflater.inflate(R.layout.elem_title, parent, false)
             val header = view.findViewById<TextView>(R.id.textViewHeader)
             header.text = array[position].getHeader()
             val text = view.findViewById<TextView>(R.id.textViewText)
             text.text = array[position].getText()
         } else {
-            view = layoutInflater.inflate(R.layout.elem_chord, null)
+            view = layoutInflater.inflate(R.layout.elem_chord, parent, false)
             val keys = arrayOfNulls<Button>(24) //массив клавиш
             keys[0] = view.findViewById(R.id.button1)
             keys[1] = view.findViewById(R.id.button2)
@@ -57,24 +57,18 @@ class ScrollAdapter(private val context: Context? = null,
             val text = view.findViewById<TextView>(R.id.textViewText)
             text.text = array[position].getText()
             var j = 0
-            for (i in 0..array[position].getInterval()!!.size) {
+            for (i in 0..array[position].getInterval().size) {
                 keys[j]!!.setBackgroundResource(R.drawable.key_pressed)
-                if (i != array[position].getInterval()!!.size) j += array[position].getInterval()
-                    ?.get(i)!!.toInt()
+                if (i != array[position].getInterval().size) j += array[position].getInterval()[i].toInt()
             }
         }
         return view
     }
 
-    override fun getCount(): Int {
-        return array.size
-    }
+    override fun getCount() = array.size
 
-    override fun getItem(position: Int): Any {
-        return array[position]
-    }
+    override fun getItem(position: Int) = array[position]
 
-    override fun getItemId(position: Int): Long {
-        return position.toLong()
-    }
+    override fun getItemId(position: Int): Long = position.toLong()
+
 }

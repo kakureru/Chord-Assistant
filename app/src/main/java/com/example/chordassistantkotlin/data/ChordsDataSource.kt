@@ -9,10 +9,10 @@ class ChordsDataSource {
 
     //заполнение массива аккордов
     fun loadChords(
-        seventh: Boolean,
-        ninth: Boolean,
-        eleventh: Boolean,
-        thirteenth: Boolean
+        seventh: Boolean = true,
+        ninth: Boolean = true,
+        eleventh: Boolean = true,
+        thirteenth: Boolean = true
     ): MutableList<Chord> {
         chordsArray.clear()
         chordsArray.add(Chord("5", intArrayOf(7), 0))

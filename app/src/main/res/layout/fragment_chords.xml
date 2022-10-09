@@ -1,0 +1,460 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".ChordsFragment">
+
+    <data>
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/nav_host_fragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/grey"
+        android:orientation="vertical">
+
+
+        <ImageView
+            android:id="@+id/lupa"
+            android:layout_width="300dp"
+            android:layout_height="300dp"
+            android:alpha="0"
+            app:layout_constraintBottom_toTopOf="@+id/horizontalScrollView2"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/recycler_view"
+            app:srcCompat="@drawable/searchbg" />
+
+        <HorizontalScrollView
+            android:id="@+id/horizontalScrollView2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="#00FFFFFF"
+            app:layout_constraintBottom_toTopOf="@+id/horizontalScrollView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:background="@color/grey_dark"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/buttonC"
+                    style="@style/Widget.ChordAssistant.TonicButton"
+                    android:background="@drawable/rounded_button"
+                    android:contentDescription="@string/c_note"
+                    android:text="@string/c_note" />
+
+                <Button
+                    android:id="@+id/buttonDb"
+                    style="@style/Widget.ChordAssistant.TonicButton"
+                    android:contentDescription="@string/db_note"
+                    android:text="@string/db_note" />
+
+                <Button
+                    android:id="@+id/buttonD"
+                    style="@style/Widget.ChordAssistant.TonicButton"
+                    android:contentDescription="@string/d_note"
+                    android:text="@string/d_note" />
+
+                <Button
+                    android:id="@+id/buttonEb"
+                    style="@style/Widget.ChordAssistant.TonicButton"
+                    android:contentDescription="@string/eb_note"
+                    android:text="@string/eb_note" />
+
+                <Button
+                    android:id="@+id/buttonE"
+                    style="@style/Widget.ChordAssistant.TonicButton"
+                    android:contentDescription="@string/e_note"
+                    android:text="@string/e_note" />
+
+                <Button
+                    android:id="@+id/buttonF"
+                    style="@style/Widget.ChordAssistant.TonicButton"
+                    android:contentDescription="@string/f_note"
+                    android:text="@string/f_note" />
+
+                <Button
+                    android:id="@+id/buttonGb"
+                    style="@style/Widget.ChordAssistant.TonicButton"
+                    android:contentDescription="@string/gb_note"
+                    android:text="@string/gb_note" />
+
+                <Button
+                    android:id="@+id/buttonG"
+                    style="@style/Widget.ChordAssistant.TonicButton"
+                    android:contentDescription="@string/g_note"
+                    android:text="@string/g_note" />
+
+                <Button
+                    android:id="@+id/buttonAb"
+                    style="@style/Widget.ChordAssistant.TonicButton"
+                    android:contentDescription="@string/ab_note"
+                    android:text="@string/ab_note" />
+
+                <Button
+                    android:id="@+id/buttonA"
+                    style="@style/Widget.ChordAssistant.TonicButton"
+                    android:contentDescription="@string/a_note"
+                    android:text="@string/a_note" />
+
+                <Button
+                    android:id="@+id/buttonBb"
+                    style="@style/Widget.ChordAssistant.TonicButton"
+                    android:contentDescription="@string/bb_note"
+                    android:text="@string/bb_note" />
+
+                <Button
+                    android:id="@+id/buttonB"
+                    style="@style/Widget.ChordAssistant.TonicButton"
+                    android:contentDescription="@string/b_note"
+                    android:text="@string/b_note" />
+            </LinearLayout>
+        </HorizontalScrollView>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_view"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="8dp"
+            android:visibility="visible"
+            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+            app:layout_constraintBottom_toTopOf="@+id/horizontalScrollView2"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout"
+            app:spanCount="5" />
+
+        <LinearLayout
+            android:id="@+id/linearLayout"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="6dp"
+            android:layout_marginEnd="4dp"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageButton
+                android:id="@+id/imageButtonPiano"
+                style="@android:style/Widget.Holo.ImageButton"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@null"
+                android:padding="9dp"
+                android:scaleType="centerInside"
+                android:scaleX=".8"
+                android:scaleY=".8"
+                app:srcCompat="@drawable/piano" />
+
+            <ImageButton
+                android:id="@+id/imageButtonCello"
+                style="@android:style/Widget.Holo.ImageButton"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:alpha=".5"
+                android:background="@null"
+                android:padding="8dp"
+                android:scaleType="centerInside"
+                android:scaleX=".8"
+                android:scaleY=".8"
+                app:srcCompat="@drawable/cello" />
+
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/switch7"
+                style="@style/Widget.ChordAssistant.CompoundButton.Switch"
+                android:theme="@style/Theme.Switch7" />
+
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/switch9"
+                style="@style/Widget.ChordAssistant.CompoundButton.Switch"
+                android:theme="@style/Theme.Switch9" />
+
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/switch11"
+                style="@style/Widget.ChordAssistant.CompoundButton.Switch"
+                android:theme="@style/Theme.Switch11" />
+
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/switch13"
+                style="@style/Widget.ChordAssistant.CompoundButton.Switch"
+                android:theme="@style/Theme.Switch13" />
+
+            <ImageButton
+                android:id="@+id/imageButtonFind"
+                style="@android:style/Widget.Holo.ImageButton"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:alpha=".5"
+                android:background="@null"
+                android:padding="8dp"
+                android:scaleType="fitCenter"
+                app:srcCompat="@drawable/ic_search" />
+
+            <ImageButton
+                android:id="@+id/imageButtonInfo"
+                style="@android:style/Widget.Holo.ImageButton"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@null"
+                android:padding="8dp"
+                android:scaleType="fitCenter"
+                app:srcCompat="@drawable/ic_book" />
+
+        </LinearLayout>
+
+        <HorizontalScrollView
+            android:id="@+id/horizontalScrollView"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:isScrollContainer="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:id="@+id/notes"
+                    android:layout_width="1072dp"
+                    android:layout_height="175dp"
+                    android:isScrollContainer="true"
+                    android:orientation="horizontal"
+                    android:visibility="visible"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <Button
+                        android:id="@+id/button1"
+                        style="@style/Widget.ChordAssistant.WhiteKeyButton"
+                        android:text="@string/c_note" />
+
+                    <Button
+                        android:id="@+id/button3"
+                        style="@style/Widget.ChordAssistant.WhiteKeyButton"
+                        android:text="@string/d_note" />
+
+                    <Button
+                        android:id="@+id/button5"
+                        style="@style/Widget.ChordAssistant.WhiteKeyButton"
+                        android:text="@string/e_note" />
+
+                    <Button
+                        android:id="@+id/button6"
+                        style="@style/Widget.ChordAssistant.WhiteKeyButton"
+                        android:text="@string/f_note" />
+
+                    <Button
+                        android:id="@+id/button8"
+                        style="@style/Widget.ChordAssistant.WhiteKeyButton"
+                        android:text="@string/g_note" />
+
+                    <Button
+                        android:id="@+id/button10"
+                        style="@style/Widget.ChordAssistant.WhiteKeyButton"
+                        android:text="@string/a_note" />
+
+                    <Button
+                        android:id="@+id/button12"
+                        style="@style/Widget.ChordAssistant.WhiteKeyButton"
+                        android:text="@string/b_note" />
+
+                    <Button
+                        android:id="@+id/button13"
+                        style="@style/Widget.ChordAssistant.WhiteKeyButton"
+                        android:text="@string/c_note" />
+
+                    <Button
+                        android:id="@+id/button15"
+                        style="@style/Widget.ChordAssistant.WhiteKeyButton"
+                        android:text="@string/d_note" />
+
+                    <Button
+                        android:id="@+id/button17"
+                        style="@style/Widget.ChordAssistant.WhiteKeyButton"
+                        android:text="@string/e_note" />
+
+                    <Button
+                        android:id="@+id/button18"
+                        style="@style/Widget.ChordAssistant.WhiteKeyButton"
+                        android:text="@string/f_note" />
+
+                    <Button
+                        android:id="@+id/button20"
+                        style="@style/Widget.ChordAssistant.WhiteKeyButton"
+                        android:text="@string/g_note" />
+
+                    <Button
+                        android:id="@+id/button22"
+                        style="@style/Widget.ChordAssistant.WhiteKeyButton"
+                        android:text="@string/a_note" />
+
+                    <Button
+                        android:id="@+id/button24"
+                        style="@style/Widget.ChordAssistant.WhiteKeyButton"
+                        android:text="@string/b_note" />
+
+                    <Button
+                        android:id="@+id/button25"
+                        style="@style/Widget.ChordAssistant.WhiteKeyButton"
+                        android:text="@string/c_note" />
+
+                    <Button
+                        android:id="@+id/button27"
+                        style="@style/Widget.ChordAssistant.WhiteKeyButton"
+                        android:text="@string/d_note" />
+
+                    <Button
+                        android:id="@+id/button29"
+                        style="@style/Widget.ChordAssistant.WhiteKeyButton"
+                        android:text="@string/e_note" />
+
+                    <Button
+                        android:id="@+id/button30"
+                        style="@style/Widget.ChordAssistant.WhiteKeyButton"
+                        android:text="@string/f_note" />
+
+                    <Button
+                        android:id="@+id/button32"
+                        style="@style/Widget.ChordAssistant.WhiteKeyButton"
+                        android:text="@string/g_note" />
+
+                    <Button
+                        android:id="@+id/button34"
+                        style="@style/Widget.ChordAssistant.WhiteKeyButton"
+                        android:text="@string/a_note" />
+
+                    <Button
+                        android:id="@+id/button36"
+                        style="@style/Widget.ChordAssistant.WhiteKeyButton"
+                        android:text="@string/b_note" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/flats"
+                    android:layout_width="1072dp"
+                    android:layout_height="175dp"
+                    android:orientation="horizontal"
+                    android:visibility="visible"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.0">
+
+                    <Button
+                        android:id="@+id/button2"
+                        style="@style/Widget.ChordAssistant.BlackKeyButton"
+                        android:layout_marginLeft="30dp"
+                        android:text="@string/db_note"
+                        tools:ignore="RtlHardcoded" />
+
+                    <Button
+                        android:id="@+id/button4"
+                        style="@style/Widget.ChordAssistant.BlackKeyButton"
+                        android:layout_marginRight="70dp"
+                        android:text="@string/eb_note"
+                        tools:ignore="RtlHardcoded" />
+
+                    <Button
+                        android:id="@+id/button7"
+                        style="@style/Widget.ChordAssistant.BlackKeyButton"
+                        android:text="@string/gb_note" />
+
+                    <Button
+                        android:id="@+id/button9"
+                        style="@style/Widget.ChordAssistant.BlackKeyButton"
+                        android:text="@string/ab_note" />
+
+                    <Button
+                        android:id="@+id/button11"
+                        style="@style/Widget.ChordAssistant.BlackKeyButton"
+                        android:layout_marginRight="30dp"
+                        android:text="@string/bb_note"
+                        tools:ignore="RtlHardcoded" />
+
+                    <Button
+                        android:id="@+id/button14"
+                        style="@style/Widget.ChordAssistant.BlackKeyButton"
+                        android:layout_marginLeft="30dp"
+                        android:text="@string/db_note"
+                        tools:ignore="RtlHardcoded" />
+
+                    <Button
+                        android:id="@+id/button16"
+                        style="@style/Widget.ChordAssistant.BlackKeyButton"
+                        android:layout_marginRight="70dp"
+                        android:text="@string/eb_note"
+                        tools:ignore="RtlHardcoded" />
+
+                    <Button
+                        android:id="@+id/button19"
+                        style="@style/Widget.ChordAssistant.BlackKeyButton"
+                        android:text="@string/gb_note" />
+
+                    <Button
+                        android:id="@+id/button21"
+                        style="@style/Widget.ChordAssistant.BlackKeyButton"
+                        android:text="@string/ab_note" />
+
+                    <Button
+                        android:id="@+id/button23"
+                        style="@style/Widget.ChordAssistant.BlackKeyButton"
+                        android:layout_marginRight="30dp"
+                        android:text="@string/bb_note"
+                        tools:ignore="RtlHardcoded" />
+
+                    <Button
+                        android:id="@+id/button26"
+                        style="@style/Widget.ChordAssistant.BlackKeyButton"
+                        android:layout_marginLeft="30dp"
+                        android:text="@string/db_note"
+                        tools:ignore="RtlHardcoded" />
+
+                    <Button
+                        android:id="@+id/button28"
+                        style="@style/Widget.ChordAssistant.BlackKeyButton"
+                        android:layout_marginRight="70dp"
+                        android:text="@string/eb_note"
+                        tools:ignore="RtlHardcoded" />
+
+                    <Button
+                        android:id="@+id/button31"
+                        style="@style/Widget.ChordAssistant.BlackKeyButton"
+                        android:text="@string/gb_note" />
+
+                    <Button
+                        android:id="@+id/button33"
+                        style="@style/Widget.ChordAssistant.BlackKeyButton"
+                        android:text="@string/ab_note" />
+
+                    <Button
+                        android:id="@+id/button35"
+                        style="@style/Widget.ChordAssistant.BlackKeyButton"
+                        android:layout_marginRight="30dp"
+                        android:text="@string/bb_note"
+                        tools:ignore="RtlHardcoded" />
+                </LinearLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </HorizontalScrollView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

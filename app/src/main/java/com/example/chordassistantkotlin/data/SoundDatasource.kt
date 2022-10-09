@@ -8,7 +8,7 @@ import com.example.chordassistantkotlin.R
 class SoundDatasource {
 
     //заполнение массива звуков пианино
-    fun loadPianoPool(context: Context, soundPool: SoundPool?): Array<Int> {
+    fun loadPianoPool(context: Context?, soundPool: SoundPool?): Array<Int> {
         return arrayOf(
             soundPool!!.load(context, R.raw.c1, 1),
             soundPool.load(context, R.raw.db1, 1),
@@ -50,7 +50,7 @@ class SoundDatasource {
     }
 
     //заполнение массива звуков скрипки
-    fun loadCelloPool(context: Context, soundPool: SoundPool?): Array<Int> {
+    fun loadCelloPool(context: Context?, soundPool: SoundPool?): Array<Int> {
         return arrayOf(
             soundPool!!.load(context, R.raw.c1cel, 1),
             soundPool.load(context, R.raw.db1cel, 1),
