@@ -2,5 +2,18 @@ package com.example.chordassistantkotlin.constants
 
 object Scale {
     const val KEYS_COUNT = 36
-    const val TONICS_COUNT = 12
+    val TONICS = listOf(
+        "C",
+        "C#",
+        "D",
+        "D#",
+        "E",
+        "F",
+        "F#",
+        "G",
+        "G#",
+        "A",
+        "A#",
+        "B"
+    )
 }

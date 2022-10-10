@@ -5,7 +5,9 @@
     tools:context=".ChordsFragment">
 
     <data>
-
+        <variable
+            name="chordsFragment"
+            type="com.example.chordassistantkotlin.ChordsFragment" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -21,103 +23,25 @@
             android:layout_width="300dp"
             android:layout_height="300dp"
             android:alpha="0"
-            app:layout_constraintBottom_toTopOf="@+id/horizontalScrollView2"
+            app:layout_constraintBottom_toTopOf="@+id/tonicsScrollView"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/recycler_view"
             app:srcCompat="@drawable/searchbg" />
 
-        <HorizontalScrollView
-            android:id="@+id/horizontalScrollView2"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/tonicsScrollView"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            android:orientation="horizontal"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:background="#00FFFFFF"
+            android:background="@color/grey_dark"
             app:layout_constraintBottom_toTopOf="@+id/horizontalScrollView"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent">
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:background="@color/grey_dark"
-                android:orientation="horizontal">
-
-                <Button
-                    android:id="@+id/buttonC"
-                    style="@style/Widget.ChordAssistant.TonicButton"
-                    android:background="@drawable/rounded_button"
-                    android:contentDescription="@string/c_note"
-                    android:text="@string/c_note" />
-
-                <Button
-                    android:id="@+id/buttonDb"
-                    style="@style/Widget.ChordAssistant.TonicButton"
-                    android:contentDescription="@string/db_note"
-                    android:text="@string/db_note" />
-
-                <Button
-                    android:id="@+id/buttonD"
-                    style="@style/Widget.ChordAssistant.TonicButton"
-                    android:contentDescription="@string/d_note"
-                    android:text="@string/d_note" />
-
-                <Button
-                    android:id="@+id/buttonEb"
-                    style="@style/Widget.ChordAssistant.TonicButton"
-                    android:contentDescription="@string/eb_note"
-                    android:text="@string/eb_note" />
-
-                <Button
-                    android:id="@+id/buttonE"
-                    style="@style/Widget.ChordAssistant.TonicButton"
-                    android:contentDescription="@string/e_note"
-                    android:text="@string/e_note" />
-
-                <Button
-                    android:id="@+id/buttonF"
-                    style="@style/Widget.ChordAssistant.TonicButton"
-                    android:contentDescription="@string/f_note"
-                    android:text="@string/f_note" />
-
-                <Button
-                    android:id="@+id/buttonGb"
-                    style="@style/Widget.ChordAssistant.TonicButton"
-                    android:contentDescription="@string/gb_note"
-                    android:text="@string/gb_note" />
-
-                <Button
-                    android:id="@+id/buttonG"
-                    style="@style/Widget.ChordAssistant.TonicButton"
-                    android:contentDescription="@string/g_note"
-                    android:text="@string/g_note" />
-
-                <Button
-                    android:id="@+id/buttonAb"
-                    style="@style/Widget.ChordAssistant.TonicButton"
-                    android:contentDescription="@string/ab_note"
-                    android:text="@string/ab_note" />
-
-                <Button
-                    android:id="@+id/buttonA"
-                    style="@style/Widget.ChordAssistant.TonicButton"
-                    android:contentDescription="@string/a_note"
-                    android:text="@string/a_note" />
-
-                <Button
-                    android:id="@+id/buttonBb"
-                    style="@style/Widget.ChordAssistant.TonicButton"
-                    android:contentDescription="@string/bb_note"
-                    android:text="@string/bb_note" />
-
-                <Button
-                    android:id="@+id/buttonB"
-                    style="@style/Widget.ChordAssistant.TonicButton"
-                    android:contentDescription="@string/b_note"
-                    android:text="@string/b_note" />
-            </LinearLayout>
-        </HorizontalScrollView>
+        </androidx.recyclerview.widget.RecyclerView>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_view"
@@ -126,7 +50,7 @@
             android:layout_marginTop="8dp"
             android:visibility="visible"
             app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-            app:layout_constraintBottom_toTopOf="@+id/horizontalScrollView2"
+            app:layout_constraintBottom_toTopOf="@+id/tonicsScrollView"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/linearLayout"
@@ -147,6 +71,7 @@
             <ImageButton
                 android:id="@+id/imageButtonPiano"
                 style="@android:style/Widget.Holo.ImageButton"
+                android:onClick="@{() -> chordsFragment.switchToPiano()}"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -159,6 +84,7 @@
 
             <ImageButton
                 android:id="@+id/imageButtonCello"
+                android:onClick="@{() -> chordsFragment.switchToCello()}"
                 style="@android:style/Widget.Holo.ImageButton"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -173,26 +99,31 @@
 
             <androidx.appcompat.widget.SwitchCompat
                 android:id="@+id/switch7"
+                android:onCheckedChanged="@{() -> chordsFragment.onCheckedChanged()}"
                 style="@style/Widget.ChordAssistant.CompoundButton.Switch"
                 android:theme="@style/Theme.Switch7" />
 
             <androidx.appcompat.widget.SwitchCompat
                 android:id="@+id/switch9"
+                android:onCheckedChanged="@{() -> chordsFragment.onCheckedChanged()}"
                 style="@style/Widget.ChordAssistant.CompoundButton.Switch"
                 android:theme="@style/Theme.Switch9" />
 
             <androidx.appcompat.widget.SwitchCompat
                 android:id="@+id/switch11"
+                android:onCheckedChanged="@{() -> chordsFragment.onCheckedChanged()}"
                 style="@style/Widget.ChordAssistant.CompoundButton.Switch"
                 android:theme="@style/Theme.Switch11" />
 
             <androidx.appcompat.widget.SwitchCompat
                 android:id="@+id/switch13"
+                android:onCheckedChanged="@{() -> chordsFragment.onCheckedChanged()}"
                 style="@style/Widget.ChordAssistant.CompoundButton.Switch"
                 android:theme="@style/Theme.Switch13" />
 
             <ImageButton
                 android:id="@+id/imageButtonFind"
+                android:onClick="@{() -> chordsFragment.switchSearchMode()}"
                 style="@android:style/Widget.Holo.ImageButton"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -205,6 +136,7 @@
 
             <ImageButton
                 android:id="@+id/imageButtonInfo"
+                android:onClick="@{() -> chordsFragment.goToInfo()}"
                 style="@android:style/Widget.Holo.ImageButton"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"

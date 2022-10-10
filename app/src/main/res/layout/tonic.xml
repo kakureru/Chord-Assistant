@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <TextView
+        android:id="@+id/textView"
+        android:gravity="center"
+        android:background="@drawable/rounded_button_disabled"
+        android:layout_width="48dp"
+        android:layout_height="24dp"
+        android:layout_marginLeft="3dp"
+        android:layout_marginTop="6dp"
+        android:layout_marginRight="3dp"
+        android:layout_marginBottom="6dp"
+        android:textSize="14sp"
+        tools:text="@string/c_note"/>
+
+</FrameLayout>

@@ -18,12 +18,14 @@ class GridAdapter(
     class ItemViewHolder(
         view: View,
         private val onItemClicked: (position: Int) -> Unit
-    ): RecyclerView.ViewHolder(view), View.OnClickListener {
+    ) : RecyclerView.ViewHolder(view), View.OnClickListener {
         val textView: TextView = view.findViewById(R.id.textView)
         val layout: ConstraintLayout = view.findViewById(R.id.layout)
+
         init {
             itemView.setOnClickListener(this)
         }
+
         override fun onClick(v: View) {
             val position = adapterPosition
             onItemClicked(position)

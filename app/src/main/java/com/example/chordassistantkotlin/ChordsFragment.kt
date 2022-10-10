@@ -7,9 +7,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.CompoundButton
+import android.widget.TextView
 import androidx.navigation.fragment.findNavController
 import com.example.chordassistantkotlin.adapter.GridAdapter
+import com.example.chordassistantkotlin.adapter.TonicAdapter
 import com.example.chordassistantkotlin.constants.Instrument
 import com.example.chordassistantkotlin.constants.Scale
 import com.example.chordassistantkotlin.data.ChordsDataSource
@@ -19,86 +20,50 @@ import com.example.chordassistantkotlin.model.Chord
 import java.util.*
 
 
-class ChordsFragment : Fragment(), CompoundButton.OnCheckedChangeListener  {
+class ChordsFragment : Fragment() {
 
-    private var instrument = Instrument.PIANO
     var soundPool: SoundPool? = SoundPool.Builder().setMaxStreams(7).build()
     private lateinit var pianoSounds: Array<Int>
     private lateinit var celloSounds: Array<Int>
-    private var adapter: GridAdapter? = null
-    private var searchAdapter: GridAdapter? = null
+    private lateinit var gridAdapter: GridAdapter
+    private lateinit var searchAdapter: GridAdapter
     private val keys = arrayOfNulls<Button>(Scale.KEYS_COUNT) // массив клавиш
-    private val tonics = arrayOfNulls<Button>(Scale.TONICS_COUNT) // массив клавиш
-    private var chordsArray = ChordsDataSource().loadChords() // массив аккордов
-    private val searchResultArray = mutableListOf<Chord>() // массив аккордов, подходящих под заданные интервалы
-    private val searchIntervalsArray = mutableListOf<Int>() // массив интервалов для поиска аккордов
+    private var chordsList = ChordsDataSource().loadChords() // список аккордов
+    private val searchList = mutableListOf<Chord>() // список аккордов с искомыми интервалами
+    private val intervalsList = mutableListOf<Int>() // список интервалов для поиска аккордов
     private var isSearchMode = false
     private var tonic = 0
+    private var instrument = Instrument.PIANO
 
     private var _binding: FragmentChordsBinding? = null
     private val binding get() = _binding!!
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentChordsBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        findKeys()
-        findTonics()
+
+        gridAdapter =
+            GridAdapter(chordsList) { position -> onGridItemClick(position) } // адаптер таблицы аккордов
+        val tonicsAdapter =
+            TonicAdapter(Scale.TONICS) { position -> onTonicSelected(position) }
+
+        binding.apply {
+            recyclerView.adapter = gridAdapter
+            tonicsScrollView.adapter = tonicsAdapter
+            chordsFragment = this@ChordsFragment
+        }
 
         pianoSounds = SoundDatasource().loadPianoPool(context, soundPool)
         celloSounds = SoundDatasource().loadCelloPool(context, soundPool)
 
-        // Initialize data
-        chordsArray = ChordsDataSource().loadChords(
-            binding.switch7.isChecked,
-            binding.switch9.isChecked,
-            binding.switch11.isChecked,
-            binding.switch13.isChecked
-        )
-
-        // создание и установка адаптера таблицы аккордов
-        adapter = GridAdapter(chordsArray) { position -> onGridItemClick(position) }
-        binding.recyclerView.adapter = adapter
-
-        // переключение инструментов
-        binding.imageButtonPiano.setOnClickListener { switchToPiano() }
-        binding.imageButtonCello.setOnClickListener { switchToCello() }
-
-        // вкл/выкл ступеней
-        binding.switch7.setOnCheckedChangeListener(this)
-        binding.switch9.setOnCheckedChangeListener(this)
-        binding.switch11.setOnCheckedChangeListener(this)
-        binding.switch13.setOnCheckedChangeListener(this)
-
-        // вкл/выкл режима поиска
-        binding.imageButtonFind.setOnClickListener {
-            if (isSearchMode) offSearchMode()
-            else onSearchMode()
-        }
-
-        // переход в окно справки
-        binding.imageButtonInfo.setOnClickListener {
-            findNavController().navigate(R.id.action_chordsFragment_to_infoFragment)
-        }
-
-        //обработка выбора тоники
-        for (i in 0 until Scale.TONICS_COUNT) {
-            tonics[i]!!.setOnClickListener {
-                tonics[tonic]!!.setBackgroundResource(R.drawable.rounded_button_disabled)
-                tonics[i]!!.setBackgroundResource(R.drawable.rounded_button)
-                tonic = i
-            }
-        }
+        findKeys()
 
         //обработка нажатий на клавиши
         for (selectedNote in 0 until Scale.KEYS_COUNT) {
@@ -112,32 +77,32 @@ class ChordsFragment : Fragment(), CompoundButton.OnCheckedChangeListener  {
                 // if search mode is on
                 if (isSearchMode) {
                     //если только включили режим поиска
-                    if (searchIntervalsArray.size == 0)
+                    if (intervalsList.size == 0)
                         clearPianoRoll()
 
                     //проверяем не нажата ли уже выбранная ранее клавиша
                     var isAlreadySelected = false
-                    for (k in searchIntervalsArray.indices)
+                    for (k in intervalsList.indices)
                     //если нажата уже выбранная ранее клавиша
-                        if (searchIntervalsArray[k] == selectedNote) {
+                        if (intervalsList[k] == selectedNote) {
                             isAlreadySelected = true
                             clearColor(selectedNote)
-                            searchIntervalsArray.remove(k)
+                            intervalsList.remove(k)
 
                             //проверяем остались ли выбранные ноты
-                            if (searchIntervalsArray.size != 0) {
-                                searchResultArray.clear()
+                            if (intervalsList.size != 0) {
+                                searchList.clear()
                                 findChords()
                             } else {
-                                searchResultArray.clear()
+                                searchList.clear()
                                 searchAdapter!!.notifyDataSetChanged()
                             }
                             break
                         }
                     if (!isAlreadySelected) {
                         keys[selectedNote]!!.setBackgroundResource(R.drawable.key_pressed)
-                        searchIntervalsArray.add(selectedNote)
-                        searchIntervalsArray.sort()
+                        intervalsList.add(selectedNote)
+                        intervalsList.sort()
                         findChords()
                     }
                 }
@@ -153,15 +118,24 @@ class ChordsFragment : Fragment(), CompoundButton.OnCheckedChangeListener  {
     private fun onGridItemClick(position: Int) {
         clearPianoRoll()
         if (isSearchMode) {
-            searchIntervalsArray.clear()
-            showChord(searchResultArray, position, tonic)
+            intervalsList.clear()
+            showChord(searchList, position, tonic)
         } else
-            showChord(chordsArray, position, tonic)
+            showChord(chordsList, position, tonic)
     }
 
-    override fun onCheckedChanged(p0: CompoundButton?, p1: Boolean) {
-        chordsArray.clear()
-        chordsArray.addAll(
+    private fun onTonicSelected(position: Int) {
+        binding.tonicsScrollView
+            .findViewHolderForAdapterPosition(tonic)
+            ?.itemView
+            ?.findViewById<TextView>(R.id.textView)
+            ?.setBackgroundResource(R.drawable.rounded_button_disabled)
+        tonic = position
+    }
+
+    fun onCheckedChanged() {
+        chordsList.clear()
+        chordsList.addAll(
             ChordsDataSource().loadChords(
                 binding.switch7.isChecked,
                 binding.switch9.isChecked,
@@ -169,29 +143,34 @@ class ChordsFragment : Fragment(), CompoundButton.OnCheckedChangeListener  {
                 binding.switch13.isChecked
             )
         )
-        adapter!!.notifyDataSetChanged()
-        searchResultArray.clear()
+        gridAdapter!!.notifyDataSetChanged()
+        searchList.clear()
         //если сортируем во время поиска
-        if (searchIntervalsArray.size != 0) {
-            for (l in chordsArray.indices)
-                if (chordsArray[l].getInterval().contentEquals(getIntervals(searchIntervalsArray))
-                    || convertIntervals(chordsArray[l].getInterval()).contains(
-                        convertIntervals(getIntervals(searchIntervalsArray))
+        if (intervalsList.size != 0) {
+            for (l in chordsList.indices)
+                if (chordsList[l].getInterval().contentEquals(getIntervals(intervalsList))
+                    || convertIntervals(chordsList[l].getInterval()).contains(
+                        convertIntervals(getIntervals(intervalsList))
                     )
                 ) {
-                    if (chordsArray[l].getStage() == 0)
-                        searchResultArray.add(chordsArray[l])
-                    else if (chordsArray[l].getStage() == 7 && binding.switch7.isChecked)
-                        searchResultArray.add(chordsArray[l])
-                    else if (chordsArray[l].getStage() == 9 && binding.switch9.isChecked)
-                        searchResultArray.add(chordsArray[l])
-                    else if (chordsArray[l].getStage() == 11 && binding.switch11.isChecked)
-                        searchResultArray.add(chordsArray[l])
-                    else if (chordsArray[l].getStage() == 13 && binding.switch13.isChecked)
-                        searchResultArray.add(chordsArray[l])
+                    if (chordsList[l].getStage() == 0)
+                        searchList.add(chordsList[l])
+                    else if (chordsList[l].getStage() == 7 && binding.switch7.isChecked)
+                        searchList.add(chordsList[l])
+                    else if (chordsList[l].getStage() == 9 && binding.switch9.isChecked)
+                        searchList.add(chordsList[l])
+                    else if (chordsList[l].getStage() == 11 && binding.switch11.isChecked)
+                        searchList.add(chordsList[l])
+                    else if (chordsList[l].getStage() == 13 && binding.switch13.isChecked)
+                        searchList.add(chordsList[l])
                 }
             searchAdapter!!.notifyDataSetChanged()
         }
+    }
+
+    fun switchSearchMode() {
+        if (isSearchMode) offSearchMode()
+        else onSearchMode()
     }
 
     private fun onSearchMode() {
@@ -199,28 +178,28 @@ class ChordsFragment : Fragment(), CompoundButton.OnCheckedChangeListener  {
         binding.lupa.alpha = 0.1f
         isSearchMode = true
         clearPianoRoll()
-        searchAdapter = GridAdapter(searchResultArray) { position -> onGridItemClick(position) }
+        searchAdapter = GridAdapter(searchList) { position -> onGridItemClick(position) }
         binding.recyclerView.adapter = searchAdapter
     }
 
     private fun offSearchMode() {
-        searchIntervalsArray.clear()
-        searchResultArray.clear()
+        intervalsList.clear()
+        searchList.clear()
         binding.imageButtonFind.alpha = 0.5f
         binding.lupa.alpha = 0f
         isSearchMode = false
         clearPianoRoll()
-        adapter = GridAdapter(chordsArray) { position -> onGridItemClick(position) }
-        binding.recyclerView.adapter = adapter
+        gridAdapter = GridAdapter(chordsList) { position -> onGridItemClick(position) }
+        binding.recyclerView.adapter = gridAdapter
     }
 
-    private fun switchToPiano() {
+    fun switchToPiano() {
         instrument = Instrument.PIANO
         binding.imageButtonPiano.alpha = 1f
         binding.imageButtonCello.alpha = 0.5f
     }
 
-    private fun switchToCello() {
+    fun switchToCello() {
         instrument = Instrument.CELLO
         binding.imageButtonPiano.alpha = 0.5f
         binding.imageButtonCello.alpha = 1f
@@ -245,17 +224,17 @@ class ChordsFragment : Fragment(), CompoundButton.OnCheckedChangeListener  {
 
     //поиск подходящих аккордов
     private fun findChords() {
-        searchResultArray.clear()
-        for (l in 0 until chordsArray.size)
+        searchList.clear()
+        for (l in 0 until chordsList.size)
         //если интервалы полностью совпадают с интервалами аккорда или
-            if (Arrays.equals(chordsArray[l].getInterval(), getIntervals(searchIntervalsArray))
-                || convertIntervals(chordsArray[l].getInterval()).contains(
+            if (Arrays.equals(chordsList[l].getInterval(), getIntervals(intervalsList))
+                || convertIntervals(chordsList[l].getInterval()).contains(
                     convertIntervals(
-                        getIntervals(searchIntervalsArray)
+                        getIntervals(intervalsList)
                     )
                 )
             )
-                searchResultArray.add(chordsArray[l])
+                searchList.add(chordsList[l])
         searchAdapter!!.notifyDataSetChanged()
     }
 
@@ -276,7 +255,7 @@ class ChordsFragment : Fragment(), CompoundButton.OnCheckedChangeListener  {
 
     //возврат клавише цвета по умолчанию
     private fun clearColor(i: Int) {
-        val j: Int = i % Scale.TONICS_COUNT
+        val j: Int = i % Scale.TONICS.size
         if (j == 1 || j == 3 || j == 6 || j == 8 || j == 10)
             keys[i]?.setBackgroundResource(R.drawable.black_key)
         else
@@ -288,20 +267,8 @@ class ChordsFragment : Fragment(), CompoundButton.OnCheckedChangeListener  {
         for (i in 0 until Scale.KEYS_COUNT) clearColor(i)
     }
 
-    //заполнение массива тоник
-    private fun findTonics() {
-        tonics[0] = binding.buttonC
-        tonics[1] = binding.buttonDb
-        tonics[2] = binding.buttonD
-        tonics[3] = binding.buttonEb
-        tonics[4] = binding.buttonE
-        tonics[5] = binding.buttonF
-        tonics[6] = binding.buttonGb
-        tonics[7] = binding.buttonG
-        tonics[8] = binding.buttonAb
-        tonics[9] = binding.buttonA
-        tonics[10] = binding.buttonBb
-        tonics[11] = binding.buttonB
+    fun goToInfo() {
+        findNavController().navigate(R.id.action_chordsFragment_to_infoFragment)
     }
 
     //заполнение массива клавиш

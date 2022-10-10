@@ -38,18 +38,6 @@
         <item name="android:textColor">"#FFFFFF"</item>
     </style>
 
-    <!-- Tonic button -->
-    <style name="Widget.ChordAssistant.TonicButton" parent="Widget.AppCompat.Button">
-        <item name="android:background">@drawable/rounded_button_disabled</item>
-        <item name="android:layout_width">48dp</item>
-        <item name="android:layout_height">24dp</item>
-        <item name="android:layout_marginLeft">3dp</item>
-        <item name="android:layout_marginTop">6dp</item>
-        <item name="android:layout_marginRight">3dp</item>
-        <item name="android:layout_marginBottom">6dp</item>
-        <item name="android:textSize">14sp</item>
-    </style>
-
     <!-- Switches -->
 
     <!-- Switch -->

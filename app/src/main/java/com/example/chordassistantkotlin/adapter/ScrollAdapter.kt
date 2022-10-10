@@ -10,9 +10,10 @@ import android.widget.TextView
 import com.example.chordassistantkotlin.R
 import com.example.chordassistantkotlin.model.InfoElem
 
-class ScrollAdapter(private val context: Context? = null,
-                    private val array: ArrayList<InfoElem> = ArrayList(22)
-                    ): BaseAdapter() {
+class ScrollAdapter(
+    private val context: Context? = null,
+    private val array: ArrayList<InfoElem> = ArrayList(22)
+) : BaseAdapter() {
 
     private var layoutInflater = LayoutInflater.from(context)
 
@@ -21,10 +22,8 @@ class ScrollAdapter(private val context: Context? = null,
         val view: View
         if (array[position].getInterval()[0] == "") {
             view = layoutInflater.inflate(R.layout.elem_title, parent, false)
-            val header = view.findViewById<TextView>(R.id.textViewHeader)
-            header.text = array[position].getHeader()
-            val text = view.findViewById<TextView>(R.id.textViewText)
-            text.text = array[position].getText()
+            view.findViewById<TextView>(R.id.textViewHeader).text = array[position].getHeader()
+            view.findViewById<TextView>(R.id.textViewText).text = array[position].getText()
         } else {
             view = layoutInflater.inflate(R.layout.elem_chord, parent, false)
             val keys = arrayOfNulls<Button>(24) //массив клавиш
@@ -52,10 +51,8 @@ class ScrollAdapter(private val context: Context? = null,
             keys[21] = view.findViewById(R.id.button22)
             keys[22] = view.findViewById(R.id.button23)
             keys[23] = view.findViewById(R.id.button24)
-            val header = view.findViewById<TextView>(R.id.textViewHeader)
-            header.text = array[position].getHeader()
-            val text = view.findViewById<TextView>(R.id.textViewText)
-            text.text = array[position].getText()
+            view.findViewById<TextView>(R.id.textViewHeader).text = array[position].getHeader()
+            view.findViewById<TextView>(R.id.textViewText).text = array[position].getText()
             var j = 0
             for (i in 0..array[position].getInterval().size) {
                 keys[j]!!.setBackgroundResource(R.drawable.key_pressed)
