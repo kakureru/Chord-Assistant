@@ -2,13 +2,16 @@ package com.example.chordassistantkotlin
 
 import android.media.SoundPool
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
+import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.chordassistantkotlin.adapter.GridAdapter
 import com.example.chordassistantkotlin.adapter.TonicAdapter
 import com.example.chordassistantkotlin.constants.Instrument
@@ -18,50 +21,48 @@ import com.example.chordassistantkotlin.data.SoundDatasource
 import com.example.chordassistantkotlin.databinding.FragmentChordsBinding
 import com.example.chordassistantkotlin.model.Chord
 import java.util.*
+import kotlin.math.floor
 
 
 class ChordsFragment : Fragment() {
 
+    private val keys = arrayOfNulls<Button>(Scale.KEYS_COUNT) // массив клавиш
+    private var chordsList = ChordsDataSource.loadChords() // список аккордов
+    private val searchList = mutableListOf<Chord>() // список аккордов с искомыми интервалами
+    private val intervalsList = mutableListOf<Int>() // список интервалов для поиска аккордов
     var soundPool: SoundPool? = SoundPool.Builder().setMaxStreams(7).build()
     private lateinit var pianoSounds: Array<Int>
     private lateinit var celloSounds: Array<Int>
-    private lateinit var gridAdapter: GridAdapter
+    private var gridAdapter = GridAdapter(chordsList) { position -> onGridItemClick(position) }
     private lateinit var searchAdapter: GridAdapter
-    private val keys = arrayOfNulls<Button>(Scale.KEYS_COUNT) // массив клавиш
-    private var chordsList = ChordsDataSource().loadChords() // список аккордов
-    private val searchList = mutableListOf<Chord>() // список аккордов с искомыми интервалами
-    private val intervalsList = mutableListOf<Int>() // список интервалов для поиска аккордов
     private var isSearchMode = false
     private var tonic = 0
     private var instrument = Instrument.PIANO
-
     private var _binding: FragmentChordsBinding? = null
     private val binding get() = _binding!!
+    private val sColumnWidth = 78f
+    private lateinit var mRecyclerView: RecyclerView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentChordsBinding.inflate(inflater, container, false)
+        binding.apply {
+            recyclerView.adapter = gridAdapter
+            tonicsScrollView.adapter = TonicAdapter(Scale.TONICS) { position -> onTonicSelected(position) }
+            chordsFragment = this@ChordsFragment
+        }
+        mRecyclerView = binding.recyclerView
+        mRecyclerView.viewTreeObserver.addOnGlobalLayoutListener { setSpanCount() }
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        gridAdapter =
-            GridAdapter(chordsList) { position -> onGridItemClick(position) } // адаптер таблицы аккордов
-        val tonicsAdapter =
-            TonicAdapter(Scale.TONICS) { position -> onTonicSelected(position) }
-
-        binding.apply {
-            recyclerView.adapter = gridAdapter
-            tonicsScrollView.adapter = tonicsAdapter
-            chordsFragment = this@ChordsFragment
-        }
-
-        pianoSounds = SoundDatasource().loadPianoPool(context, soundPool)
-        celloSounds = SoundDatasource().loadCelloPool(context, soundPool)
+        pianoSounds = SoundDatasource.loadPianoPool(context, soundPool)
+        celloSounds = SoundDatasource.loadCelloPool(context, soundPool)
 
         findKeys()
 
@@ -69,21 +70,34 @@ class ChordsFragment : Fragment() {
         for (selectedNote in 0 until Scale.KEYS_COUNT) {
             keys[selectedNote]!!.setOnClickListener {
                 // play sound of chosen instrument
-                if (instrument == Instrument.PIANO)
-                    soundPool!!.play(pianoSounds[selectedNote], 1f, 1f, 0, 0, 1f)
-                else
-                    soundPool!!.play(celloSounds[selectedNote], 1f, 1f, 0, 0, 1f)
-
+                when (instrument) {
+                    Instrument.PIANO -> soundPool!!.play(
+                        pianoSounds[selectedNote],
+                        1f,
+                        1f,
+                        0,
+                        0,
+                        1f
+                    )
+                    Instrument.CELLO -> soundPool!!.play(
+                        celloSounds[selectedNote],
+                        1f,
+                        1f,
+                        0,
+                        0,
+                        1f
+                    )
+                }
                 // if search mode is on
                 if (isSearchMode) {
                     //если только включили режим поиска
                     if (intervalsList.size == 0)
                         clearPianoRoll()
 
-                    //проверяем не нажата ли уже выбранная ранее клавиша
+                    // нажата ли уже выбранная ранее клавиша?
                     var isAlreadySelected = false
                     for (k in intervalsList.indices)
-                    //если нажата уже выбранная ранее клавиша
+                    // если клавиша уже выбрана
                         if (intervalsList[k] == selectedNote) {
                             isAlreadySelected = true
                             clearColor(selectedNote)
@@ -95,10 +109,11 @@ class ChordsFragment : Fragment() {
                                 findChords()
                             } else {
                                 searchList.clear()
-                                searchAdapter!!.notifyDataSetChanged()
+                                searchAdapter.notifyDataSetChanged()
                             }
                             break
                         }
+                    // если клавиша не выбрана
                     if (!isAlreadySelected) {
                         keys[selectedNote]!!.setBackgroundResource(R.drawable.key_pressed)
                         intervalsList.add(selectedNote)
@@ -136,14 +151,14 @@ class ChordsFragment : Fragment() {
     fun onCheckedChanged() {
         chordsList.clear()
         chordsList.addAll(
-            ChordsDataSource().loadChords(
+            ChordsDataSource.loadChords(
                 binding.switch7.isChecked,
                 binding.switch9.isChecked,
                 binding.switch11.isChecked,
                 binding.switch13.isChecked
             )
         )
-        gridAdapter!!.notifyDataSetChanged()
+        gridAdapter.notifyDataSetChanged()
         searchList.clear()
         //если сортируем во время поиска
         if (intervalsList.size != 0) {
@@ -164,7 +179,7 @@ class ChordsFragment : Fragment() {
                     else if (chordsList[l].getStage() == 13 && binding.switch13.isChecked)
                         searchList.add(chordsList[l])
                 }
-            searchAdapter!!.notifyDataSetChanged()
+            searchAdapter.notifyDataSetChanged()
         }
     }
 
@@ -235,7 +250,7 @@ class ChordsFragment : Fragment() {
                 )
             )
                 searchList.add(chordsList[l])
-        searchAdapter!!.notifyDataSetChanged()
+        searchAdapter.notifyDataSetChanged()
     }
 
     //преобразование интервалов из ArrayList в int[]
@@ -269,6 +284,20 @@ class ChordsFragment : Fragment() {
 
     fun goToInfo() {
         findNavController().navigate(R.id.action_chordsFragment_to_infoFragment)
+    }
+
+    private fun setSpanCount() {
+        val spanCount =
+            floor(mRecyclerView.width / convertDPToPixels(sColumnWidth)).toInt()
+        (mRecyclerView.layoutManager as GridLayoutManager).spanCount = spanCount
+    }
+
+    private fun convertDPToPixels(dp: Float): Float {
+        return TypedValue.applyDimension(
+            TypedValue.COMPLEX_UNIT_DIP,
+            dp,
+            resources.displayMetrics
+        )
     }
 
     //заполнение массива клавиш

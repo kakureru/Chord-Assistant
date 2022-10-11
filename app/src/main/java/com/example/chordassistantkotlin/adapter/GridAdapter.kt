@@ -1,14 +1,18 @@
 package com.example.chordassistantkotlin.adapter
 
 import android.graphics.Color
+import android.util.DisplayMetrics
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.chordassistantkotlin.R
 import com.example.chordassistantkotlin.model.Chord
+import kotlin.math.floor
+
 
 class GridAdapter(
     private val dataset: MutableList<Chord> = mutableListOf(),

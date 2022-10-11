@@ -6,9 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageButton
-import android.widget.ListView
-import com.example.chordassistantkotlin.adapter.ScrollAdapter
+import com.example.chordassistantkotlin.adapter.InfoAdapter
 import com.example.chordassistantkotlin.data.DBHelper
 import com.example.chordassistantkotlin.databinding.FragmentInfoBinding
 import com.example.chordassistantkotlin.model.InfoElem
@@ -54,7 +52,7 @@ class InfoFragment : Fragment() {
         cursor.close()
 
         //создание и установка адаптера списка информации
-        val adapter = ScrollAdapter(context, infoList)
+        val adapter = InfoAdapter(context, infoList)
         binding.listView.adapter = adapter
     }
 }

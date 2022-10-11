@@ -5,7 +5,7 @@ import android.media.SoundPool
 import com.example.chordassistantkotlin.R
 
 
-class SoundDatasource {
+object SoundDatasource {
 
     //заполнение массива звуков пианино
     fun loadPianoPool(context: Context?, soundPool: SoundPool?): Array<Int> {

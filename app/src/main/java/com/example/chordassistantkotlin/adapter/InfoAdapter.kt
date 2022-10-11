@@ -10,7 +10,7 @@ import android.widget.TextView
 import com.example.chordassistantkotlin.R
 import com.example.chordassistantkotlin.model.InfoElem
 
-class ScrollAdapter(
+class InfoAdapter(
     private val context: Context? = null,
     private val array: ArrayList<InfoElem> = ArrayList(22)
 ) : BaseAdapter() {

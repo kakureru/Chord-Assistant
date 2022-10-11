@@ -4,7 +4,7 @@ import com.example.chordassistantkotlin.MainActivity
 import com.example.chordassistantkotlin.model.Chord
 import java.util.ArrayList
 
-class ChordsDataSource {
+object ChordsDataSource {
     private val chordsArray: MutableList<Chord> = ArrayList()
 
     //заполнение массива аккордов
