@@ -1,6 +1,5 @@
 package com.example.chordassistantkotlin
 
-import android.media.SoundPool
 import android.os.Bundle
 import android.util.TypedValue
 import android.view.LayoutInflater
@@ -9,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -16,30 +16,19 @@ import com.example.chordassistantkotlin.adapter.GridAdapter
 import com.example.chordassistantkotlin.adapter.TonicAdapter
 import com.example.chordassistantkotlin.constants.Instrument
 import com.example.chordassistantkotlin.constants.Scale
-import com.example.chordassistantkotlin.data.ChordsDataSource
-import com.example.chordassistantkotlin.data.SoundDatasource
 import com.example.chordassistantkotlin.databinding.FragmentChordsBinding
 import com.example.chordassistantkotlin.model.Chord
-import java.util.*
 import kotlin.math.floor
-
 
 class ChordsFragment : Fragment() {
 
-    private val keys = arrayOfNulls<Button>(Scale.KEYS_COUNT) // массив клавиш
-    private var chordsList = ChordsDataSource.loadChords() // список аккордов
-    private val searchList = mutableListOf<Chord>() // список аккордов с искомыми интервалами
-    private val intervalsList = mutableListOf<Int>() // список интервалов для поиска аккордов
-    var soundPool: SoundPool? = SoundPool.Builder().setMaxStreams(7).build()
-    private lateinit var pianoSounds: Array<Int>
-    private lateinit var celloSounds: Array<Int>
-    private var gridAdapter = GridAdapter(chordsList) { position -> onGridItemClick(position) }
-    private lateinit var searchAdapter: GridAdapter
-    private var isSearchMode = false
-    private var tonic = 0
-    private var instrument = Instrument.PIANO
+    private val viewModel: ChordsViewModel by viewModels()
     private var _binding: FragmentChordsBinding? = null
     private val binding get() = _binding!!
+
+    private val keys = arrayOfNulls<Button>(Scale.KEYS_COUNT) // массив клавиш
+    private lateinit var gridAdapter: GridAdapter
+    private lateinit var searchAdapter: GridAdapter
     private val sColumnWidth = 78f
     private lateinit var mRecyclerView: RecyclerView
 
@@ -49,8 +38,10 @@ class ChordsFragment : Fragment() {
     ): View {
         _binding = FragmentChordsBinding.inflate(inflater, container, false)
         binding.apply {
-            recyclerView.adapter = gridAdapter
-            tonicsScrollView.adapter = TonicAdapter(Scale.TONICS) { position -> onTonicSelected(position) }
+            tonicsScrollView.adapter =
+                TonicAdapter(Scale.TONICS) { position -> onTonicSelected(position) }
+
+            chordsViewModel = viewModel
             chordsFragment = this@ChordsFragment
         }
         mRecyclerView = binding.recyclerView
@@ -60,66 +51,24 @@ class ChordsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        pianoSounds = SoundDatasource.loadPianoPool(context, soundPool)
-        celloSounds = SoundDatasource.loadCelloPool(context, soundPool)
-
         findKeys()
-
+        if (viewModel.isSearchMode)
+            onSearchMode()
+        else
+            offSearchMode()
+        viewModel.selectedChord?.let { showChord(it) }
+        when (viewModel.instrument) {
+            Instrument.PIANO -> enablePiano()
+            Instrument.CELLO -> enableCello()
+        }
         //обработка нажатий на клавиши
         for (selectedNote in 0 until Scale.KEYS_COUNT) {
             keys[selectedNote]!!.setOnClickListener {
-                // play sound of chosen instrument
-                when (instrument) {
-                    Instrument.PIANO -> soundPool!!.play(
-                        pianoSounds[selectedNote],
-                        1f,
-                        1f,
-                        0,
-                        0,
-                        1f
-                    )
-                    Instrument.CELLO -> soundPool!!.play(
-                        celloSounds[selectedNote],
-                        1f,
-                        1f,
-                        0,
-                        0,
-                        1f
-                    )
-                }
-                // if search mode is on
-                if (isSearchMode) {
-                    //если только включили режим поиска
-                    if (intervalsList.size == 0)
-                        clearPianoRoll()
-
-                    // нажата ли уже выбранная ранее клавиша?
-                    var isAlreadySelected = false
-                    for (k in intervalsList.indices)
-                    // если клавиша уже выбрана
-                        if (intervalsList[k] == selectedNote) {
-                            isAlreadySelected = true
-                            clearColor(selectedNote)
-                            intervalsList.remove(k)
-
-                            //проверяем остались ли выбранные ноты
-                            if (intervalsList.size != 0) {
-                                searchList.clear()
-                                findChords()
-                            } else {
-                                searchList.clear()
-                                searchAdapter.notifyDataSetChanged()
-                            }
-                            break
-                        }
-                    // если клавиша не выбрана
-                    if (!isAlreadySelected) {
-                        keys[selectedNote]!!.setBackgroundResource(R.drawable.key_pressed)
-                        intervalsList.add(selectedNote)
-                        intervalsList.sort()
-                        findChords()
-                    }
+                (activity as MainActivity?)?.playSound(viewModel.instrument, selectedNote)
+                if (viewModel.isSearchMode) {
+                    viewModel.onKeyPressed(selectedNote)
+                    refreshPianoRoll()
+                    findChords()
                 }
             }
         }
@@ -130,160 +79,135 @@ class ChordsFragment : Fragment() {
         _binding = null
     }
 
+    /**
+     * onClicks
+     */
+
     private fun onGridItemClick(position: Int) {
-        clearPianoRoll()
-        if (isSearchMode) {
-            intervalsList.clear()
-            showChord(searchList, position, tonic)
-        } else
-            showChord(chordsList, position, tonic)
+        refreshPianoRoll()
+        if (viewModel.isSearchMode) {
+            viewModel.resetPressed()
+            playChord(viewModel.searchResultList[position])
+            showChord(viewModel.searchResultList[position])
+        } else {
+            playChord(viewModel.chordsList[position])
+            showChord(viewModel.chordsList[position])
+        }
     }
 
     private fun onTonicSelected(position: Int) {
         binding.tonicsScrollView
-            .findViewHolderForAdapterPosition(tonic)
+            .findViewHolderForAdapterPosition(viewModel.tonic)
             ?.itemView
             ?.findViewById<TextView>(R.id.textView)
             ?.setBackgroundResource(R.drawable.rounded_button_disabled)
-        tonic = position
+        viewModel.setTonic(position)
     }
 
     fun onCheckedChanged() {
-        chordsList.clear()
-        chordsList.addAll(
-            ChordsDataSource.loadChords(
-                binding.switch7.isChecked,
-                binding.switch9.isChecked,
-                binding.switch11.isChecked,
-                binding.switch13.isChecked
-            )
+        viewModel.onCheckedChanged(
+            binding.switch7.isChecked,
+            binding.switch9.isChecked,
+            binding.switch11.isChecked,
+            binding.switch13.isChecked
         )
-        gridAdapter.notifyDataSetChanged()
-        searchList.clear()
-        //если сортируем во время поиска
-        if (intervalsList.size != 0) {
-            for (l in chordsList.indices)
-                if (chordsList[l].getInterval().contentEquals(getIntervals(intervalsList))
-                    || convertIntervals(chordsList[l].getInterval()).contains(
-                        convertIntervals(getIntervals(intervalsList))
-                    )
-                ) {
-                    if (chordsList[l].getStage() == 0)
-                        searchList.add(chordsList[l])
-                    else if (chordsList[l].getStage() == 7 && binding.switch7.isChecked)
-                        searchList.add(chordsList[l])
-                    else if (chordsList[l].getStage() == 9 && binding.switch9.isChecked)
-                        searchList.add(chordsList[l])
-                    else if (chordsList[l].getStage() == 11 && binding.switch11.isChecked)
-                        searchList.add(chordsList[l])
-                    else if (chordsList[l].getStage() == 13 && binding.switch13.isChecked)
-                        searchList.add(chordsList[l])
-                }
+        if (viewModel.isSearchMode)
             searchAdapter.notifyDataSetChanged()
-        }
+        else
+            gridAdapter.notifyDataSetChanged()
+    }
+
+    /**
+     * Search
+     */
+
+    //поиск подходящих аккордов
+    private fun findChords() {
+        viewModel.findChords()
+        searchAdapter.notifyDataSetChanged()
     }
 
     fun switchSearchMode() {
-        if (isSearchMode) offSearchMode()
-        else onSearchMode()
+        if (viewModel.isSearchMode) {
+            viewModel.offSearch()
+            offSearchMode()
+        }
+        else {
+            viewModel.onSearch()
+            onSearchMode()
+        }
     }
 
     private fun onSearchMode() {
-        binding.imageButtonFind.alpha = 1f
+        binding.imageButtonFind.setImageResource(R.drawable.ic_search_enabled)
         binding.lupa.alpha = 0.1f
-        isSearchMode = true
-        clearPianoRoll()
-        searchAdapter = GridAdapter(searchList) { position -> onGridItemClick(position) }
+        refreshPianoRoll()
+        searchAdapter =
+            GridAdapter(viewModel.searchResultList) { position -> onGridItemClick(position) }
         binding.recyclerView.adapter = searchAdapter
     }
 
     private fun offSearchMode() {
-        intervalsList.clear()
-        searchList.clear()
-        binding.imageButtonFind.alpha = 0.5f
+        binding.imageButtonFind.setImageResource(R.drawable.ic_search_disabled)
         binding.lupa.alpha = 0f
-        isSearchMode = false
-        clearPianoRoll()
-        gridAdapter = GridAdapter(chordsList) { position -> onGridItemClick(position) }
+        refreshPianoRoll()
+        gridAdapter = GridAdapter(viewModel.chordsList) { position -> onGridItemClick(position) }
         binding.recyclerView.adapter = gridAdapter
     }
 
-    fun switchToPiano() {
-        instrument = Instrument.PIANO
-        binding.imageButtonPiano.alpha = 1f
-        binding.imageButtonCello.alpha = 0.5f
-    }
+    /**
+     * PianoRoll
+     */
 
-    fun switchToCello() {
-        instrument = Instrument.CELLO
-        binding.imageButtonPiano.alpha = 0.5f
-        binding.imageButtonCello.alpha = 1f
-    }
-
-    private fun showChord(
-        intervalsArray: MutableList<Chord>,
-        position: Int,
-        startNote: Int
-    ) {
-        var startNote = startNote
-        for (i in 0..intervalsArray[position].getInterval().size) {
-            keys[startNote]!!.setBackgroundResource(R.drawable.key_pressed)
-            if (instrument == Instrument.PIANO)
-                soundPool!!.play(pianoSounds[startNote], 1f, 1f, 0, 0, 1f)
-            else
-                soundPool!!.play(celloSounds[startNote], 1f, 1f, 0, 0, 1f)
-            if (i != intervalsArray[position].getInterval().size)
-                startNote += intervalsArray[position].getInterval()[i]
+    // отображение аккорда на PianoRoll
+    private fun showChord(chord: Chord) {
+        viewModel.setSelectedChord(chord)
+        var note = viewModel.tonic
+        keys[note]!!.setBackgroundResource(R.drawable.key_pressed)
+        for (interval in chord.getIntervals()) {
+            note += interval
+            keys[note]!!.setBackgroundResource(R.drawable.key_pressed)
         }
     }
 
-    //поиск подходящих аккордов
-    private fun findChords() {
-        searchList.clear()
-        for (l in 0 until chordsList.size)
-        //если интервалы полностью совпадают с интервалами аккорда или
-            if (Arrays.equals(chordsList[l].getInterval(), getIntervals(intervalsList))
-                || convertIntervals(chordsList[l].getInterval()).contains(
-                    convertIntervals(
-                        getIntervals(intervalsList)
-                    )
-                )
-            )
-                searchList.add(chordsList[l])
-        searchAdapter.notifyDataSetChanged()
-    }
-
-    //преобразование интервалов из ArrayList в int[]
-    private fun getIntervals(array: MutableList<Int>): IntArray {
-        val intervals = IntArray(array.size - 1)
-        for (i in 0 until array.size - 1)
-            intervals[i] = array[i + 1] - array[i]
-        return intervals
-    }
-
-    //преобразование массива интервалов в строку интервалов разделённых пробелом
-    private fun convertIntervals(arr: IntArray): String {
-        val s = StringBuilder()
-        for (j in arr) s.append(" ").append(j)
-        return s.toString()
-    }
-
-    //возврат клавише цвета по умолчанию
-    private fun clearColor(i: Int) {
+    // возврат клавише цвета по умолчанию
+    private fun refreshColor(i: Int) {
         val j: Int = i % Scale.TONICS.size
-        if (j == 1 || j == 3 || j == 6 || j == 8 || j == 10)
+        if (viewModel.pressedKeys.contains(i))
+            keys[i]?.setBackgroundResource(R.drawable.key_pressed)
+        else if (j == 1 || j == 3 || j == 6 || j == 8 || j == 10)
             keys[i]?.setBackgroundResource(R.drawable.black_key)
         else
             keys[i]?.setBackgroundResource(R.drawable.white_key)
     }
 
-    //возврат цвета по умолчанию всему пианино
-    private fun clearPianoRoll() {
-        for (i in 0 until Scale.KEYS_COUNT) clearColor(i)
+    // возврат цвета по умолчанию всему PianoRoll
+    private fun refreshPianoRoll() {
+        for (i in 0 until Scale.KEYS_COUNT) refreshColor(i)
     }
+
+    /**
+     * Navigation
+     */
 
     fun goToInfo() {
         findNavController().navigate(R.id.action_chordsFragment_to_infoFragment)
+    }
+
+    /**
+     * UI
+     */
+
+    fun enablePiano() {
+        viewModel.setInstrument(Instrument.PIANO)
+        binding.imageButtonPiano.alpha = 1f
+        binding.imageButtonCello.alpha = 0.5f
+    }
+
+    fun enableCello() {
+        viewModel.setInstrument(Instrument.CELLO)
+        binding.imageButtonPiano.alpha = 0.5f
+        binding.imageButtonCello.alpha = 1f
     }
 
     private fun setSpanCount() {
@@ -338,5 +262,9 @@ class ChordsFragment : Fragment() {
         keys[33] = binding.button34
         keys[34] = binding.button35
         keys[35] = binding.button36
+    }
+
+    private fun playChord(chord: Chord) {
+        (activity as MainActivity?)?.playChord(viewModel.instrument, chord, viewModel.tonic)
     }
 }

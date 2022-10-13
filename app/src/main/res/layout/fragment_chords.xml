@@ -5,6 +5,11 @@
     tools:context=".ChordsFragment">
 
     <data>
+
+        <variable
+            name="chordsViewModel"
+            type="com.example.chordassistantkotlin.ChordsViewModel" />
+
         <variable
             name="chordsFragment"
             type="com.example.chordassistantkotlin.ChordsFragment" />
@@ -71,7 +76,7 @@
             <ImageButton
                 android:id="@+id/imageButtonPiano"
                 style="@android:style/Widget.Holo.ImageButton"
-                android:onClick="@{() -> chordsFragment.switchToPiano()}"
+                android:onClick="@{() -> chordsFragment.enablePiano()}"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -84,7 +89,7 @@
 
             <ImageButton
                 android:id="@+id/imageButtonCello"
-                android:onClick="@{() -> chordsFragment.switchToCello()}"
+                android:onClick="@{() -> chordsFragment.enableCello()}"
                 style="@android:style/Widget.Holo.ImageButton"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -99,24 +104,28 @@
 
             <androidx.appcompat.widget.SwitchCompat
                 android:id="@+id/switch7"
+                android:checked="@{chordsViewModel.seventh}"
                 android:onCheckedChanged="@{() -> chordsFragment.onCheckedChanged()}"
                 style="@style/Widget.ChordAssistant.CompoundButton.Switch"
                 android:theme="@style/Theme.Switch7" />
 
             <androidx.appcompat.widget.SwitchCompat
                 android:id="@+id/switch9"
+                android:checked="@{chordsViewModel.ninth}"
                 android:onCheckedChanged="@{() -> chordsFragment.onCheckedChanged()}"
                 style="@style/Widget.ChordAssistant.CompoundButton.Switch"
                 android:theme="@style/Theme.Switch9" />
 
             <androidx.appcompat.widget.SwitchCompat
                 android:id="@+id/switch11"
+                android:checked="@{chordsViewModel.eleventh}"
                 android:onCheckedChanged="@{() -> chordsFragment.onCheckedChanged()}"
                 style="@style/Widget.ChordAssistant.CompoundButton.Switch"
                 android:theme="@style/Theme.Switch11" />
 
             <androidx.appcompat.widget.SwitchCompat
                 android:id="@+id/switch13"
+                android:checked="@{chordsViewModel.thirteenth}"
                 android:onCheckedChanged="@{() -> chordsFragment.onCheckedChanged()}"
                 style="@style/Widget.ChordAssistant.CompoundButton.Switch"
                 android:theme="@style/Theme.Switch13" />
@@ -128,11 +137,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:alpha=".5"
                 android:background="@null"
                 android:padding="8dp"
                 android:scaleType="fitCenter"
-                app:srcCompat="@drawable/ic_search" />
+                app:srcCompat="@drawable/ic_search_disabled" />
 
             <ImageButton
                 android:id="@+id/imageButtonInfo"

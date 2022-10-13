@@ -1,6 +1,5 @@
 package com.example.chordassistantkotlin.data
 
-import com.example.chordassistantkotlin.MainActivity
 import com.example.chordassistantkotlin.model.Chord
 import java.util.ArrayList
 
