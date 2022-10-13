@@ -8,7 +8,7 @@
 
         <variable
             name="chordsViewModel"
-            type="com.example.chordassistantkotlin.ChordsViewModel" />
+            type="com.example.chordassistantkotlin.model.ChordsViewModel" />
 
         <variable
             name="chordsFragment"

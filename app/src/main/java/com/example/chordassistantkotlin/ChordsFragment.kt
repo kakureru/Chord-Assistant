@@ -18,6 +18,7 @@ import com.example.chordassistantkotlin.constants.Instrument
 import com.example.chordassistantkotlin.constants.Scale
 import com.example.chordassistantkotlin.databinding.FragmentChordsBinding
 import com.example.chordassistantkotlin.model.Chord
+import com.example.chordassistantkotlin.model.ChordsViewModel
 import kotlin.math.floor
 
 class ChordsFragment : Fragment() {
@@ -87,6 +88,7 @@ class ChordsFragment : Fragment() {
         refreshPianoRoll()
         if (viewModel.isSearchMode) {
             viewModel.resetPressed()
+            refreshPianoRoll()
             playChord(viewModel.searchResultList[position])
             showChord(viewModel.searchResultList[position])
         } else {

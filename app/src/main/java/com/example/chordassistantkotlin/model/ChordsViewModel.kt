@@ -1,9 +1,8 @@
-package com.example.chordassistantkotlin
+package com.example.chordassistantkotlin.model
 
 import androidx.lifecycle.ViewModel
 import com.example.chordassistantkotlin.constants.Instrument
 import com.example.chordassistantkotlin.data.ChordsDataSource
-import com.example.chordassistantkotlin.model.Chord
 
 class ChordsViewModel : ViewModel() {
 
@@ -51,11 +50,13 @@ class ChordsViewModel : ViewModel() {
         _searchResultList.clear()
         searchList.clear()
         resetPressed()
+        _selectedChord = null
     }
 
     fun onSearch() {
         _isSearchMode = true
         resetPressed()
+        _selectedChord = null
     }
 
     fun setTonic(tonic: Int) {
@@ -101,8 +102,10 @@ class ChordsViewModel : ViewModel() {
     // нажатие на клавишу
     fun onKeyPressed(selectedNote: Int) {
         //если только начинаем поиск
-        if (_pressedKeys.size == 0)
+        if (_pressedKeys.size == 0) {
+            _selectedChord = null
             searchList.clear()
+        }
         // если клавиша уже выбрана
         if (pressedKeys.contains(selectedNote)) {
             pressedKeys.remove(selectedNote)
