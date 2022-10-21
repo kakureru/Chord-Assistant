@@ -1,6 +1,10 @@
 package com.example.chordassistantkotlin.model
 
+import android.graphics.drawable.Drawable
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.chordassistantkotlin.R
 import com.example.chordassistantkotlin.constants.Instrument
 import com.example.chordassistantkotlin.data.ChordsDataSource
 
@@ -27,8 +31,12 @@ class ChordsViewModel : ViewModel() {
     private var _tonic = 0
     val tonic: Int get() = _tonic
 
-    private var _instrument = Instrument.PIANO
-    val instrument: Int get() = _instrument
+    private var _instrument = MutableLiveData<Int>()
+    val instrument: LiveData<Int> = _instrument
+
+    init {
+        _instrument.value = Instrument.PIANO
+    }
 
     private var _isSearchMode = false
     val isSearchMode: Boolean get() = _isSearchMode
@@ -67,8 +75,11 @@ class ChordsViewModel : ViewModel() {
         _selectedChord = chord
     }
 
-    fun setInstrument(newInstrument: Int) {
-        _instrument = newInstrument
+    fun switchInstrument() {
+        if (instrument.value == Instrument.PIANO)
+            _instrument.value = Instrument.CELLO
+        else
+            _instrument.value = Instrument.PIANO
     }
 
     fun resetPressed() {

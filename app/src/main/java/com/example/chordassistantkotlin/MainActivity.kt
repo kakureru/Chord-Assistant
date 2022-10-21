@@ -2,7 +2,10 @@ package com.example.chordassistantkotlin
 
 import android.media.SoundPool
 import android.os.Bundle
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.LiveData
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupActionBarWithNavController
@@ -10,8 +13,11 @@ import com.example.chordassistantkotlin.constants.Instrument
 import com.example.chordassistantkotlin.data.SoundDatasource
 import com.example.chordassistantkotlin.databinding.ActivityMainBinding
 import com.example.chordassistantkotlin.model.Chord
+import com.example.chordassistantkotlin.model.ChordsViewModel
 
 class MainActivity : AppCompatActivity() {
+
+    private val viewModel: ChordsViewModel by viewModels()
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var navController: NavController
@@ -40,7 +46,7 @@ class MainActivity : AppCompatActivity() {
 //        return navController.navigateUp() || super.onSupportNavigateUp()
 //    }
 
-    fun playChord(instrument: Int, chord: Chord, tonic: Int) {
+    fun playChord(instrument: Int?, chord: Chord, tonic: Int) {
         var note = tonic
         playSound(instrument, note)
         for (interval in chord.getIntervals()) {
@@ -49,7 +55,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun playSound(instrument: Int, note: Int) {
+    fun playSound(instrument: Int?, note: Int) {
         when (instrument) {
             Instrument.PIANO -> soundPool!!.play(
                 pianoSounds[note],

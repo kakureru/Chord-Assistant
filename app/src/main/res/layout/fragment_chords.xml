@@ -37,16 +37,15 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/tonicsScrollView"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            android:orientation="horizontal"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:background="@color/grey_dark"
+            android:orientation="horizontal"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintBottom_toTopOf="@+id/horizontalScrollView"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent">
-        </androidx.recyclerview.widget.RecyclerView>
+            app:layout_constraintStart_toStartOf="parent"/>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_view"
@@ -76,80 +75,66 @@
             <ImageButton
                 android:id="@+id/imageButtonPiano"
                 style="@android:style/Widget.Holo.ImageButton"
-                android:onClick="@{() -> chordsFragment.enablePiano()}"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:background="@null"
+                android:instrument="@{chordsViewModel}"
+                android:onInstrumentClick="@{chordsViewModel}"
                 android:padding="9dp"
                 android:scaleType="centerInside"
                 android:scaleX=".8"
                 android:scaleY=".8"
-                app:srcCompat="@drawable/piano" />
-
-            <ImageButton
-                android:id="@+id/imageButtonCello"
-                android:onClick="@{() -> chordsFragment.enableCello()}"
-                style="@android:style/Widget.Holo.ImageButton"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:alpha=".5"
-                android:background="@null"
-                android:padding="8dp"
-                android:scaleType="centerInside"
-                android:scaleX=".8"
-                android:scaleY=".8"
-                app:srcCompat="@drawable/cello" />
+                tools:srcCompat="@drawable/piano" />
 
             <androidx.appcompat.widget.SwitchCompat
                 android:id="@+id/switch7"
+                style="@style/Widget.ChordAssistant.CompoundButton.Switch"
                 android:checked="@{chordsViewModel.seventh}"
                 android:onCheckedChanged="@{() -> chordsFragment.onCheckedChanged()}"
-                style="@style/Widget.ChordAssistant.CompoundButton.Switch"
                 android:theme="@style/Theme.Switch7" />
 
             <androidx.appcompat.widget.SwitchCompat
                 android:id="@+id/switch9"
+                style="@style/Widget.ChordAssistant.CompoundButton.Switch"
                 android:checked="@{chordsViewModel.ninth}"
                 android:onCheckedChanged="@{() -> chordsFragment.onCheckedChanged()}"
-                style="@style/Widget.ChordAssistant.CompoundButton.Switch"
                 android:theme="@style/Theme.Switch9" />
 
             <androidx.appcompat.widget.SwitchCompat
                 android:id="@+id/switch11"
+                style="@style/Widget.ChordAssistant.CompoundButton.Switch"
                 android:checked="@{chordsViewModel.eleventh}"
                 android:onCheckedChanged="@{() -> chordsFragment.onCheckedChanged()}"
-                style="@style/Widget.ChordAssistant.CompoundButton.Switch"
                 android:theme="@style/Theme.Switch11" />
 
             <androidx.appcompat.widget.SwitchCompat
                 android:id="@+id/switch13"
+                style="@style/Widget.ChordAssistant.CompoundButton.Switch"
                 android:checked="@{chordsViewModel.thirteenth}"
                 android:onCheckedChanged="@{() -> chordsFragment.onCheckedChanged()}"
-                style="@style/Widget.ChordAssistant.CompoundButton.Switch"
                 android:theme="@style/Theme.Switch13" />
 
             <ImageButton
                 android:id="@+id/imageButtonFind"
-                android:onClick="@{() -> chordsFragment.switchSearchMode()}"
                 style="@android:style/Widget.Holo.ImageButton"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:background="@null"
+                android:onClick="@{() -> chordsFragment.switchSearchMode()}"
                 android:padding="8dp"
                 android:scaleType="fitCenter"
                 app:srcCompat="@drawable/ic_search_disabled" />
 
             <ImageButton
                 android:id="@+id/imageButtonInfo"
-                android:onClick="@{() -> chordsFragment.goToInfo()}"
                 style="@android:style/Widget.Holo.ImageButton"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:background="@null"
+                android:onClick="@{() -> chordsFragment.goToInfo()}"
                 android:padding="8dp"
                 android:scaleType="fitCenter"
                 app:srcCompat="@drawable/ic_book" />

@@ -23,8 +23,8 @@ class GridAdapter(
         view: View,
         private val onItemClicked: (position: Int) -> Unit
     ) : RecyclerView.ViewHolder(view), View.OnClickListener {
-        val textView: TextView = view.findViewById(R.id.textView)
-        val layout: ConstraintLayout = view.findViewById(R.id.layout)
+        private val textView: TextView = view.findViewById(R.id.textView)
+        private val layout: ConstraintLayout = view.findViewById(R.id.layout)
 
         init {
             itemView.setOnClickListener(this)
@@ -34,10 +34,35 @@ class GridAdapter(
             val position = adapterPosition
             onItemClicked(position)
         }
+
+        fun bind(Chord: Chord) {
+            textView.text = Chord.getName()
+            when (Chord.getStage()) {
+                7 -> {
+                    layout.setBackgroundResource(R.drawable.chord_7th)
+                    textView.setTextColor(Color.BLACK)
+                }
+                9 -> {
+                    layout.setBackgroundResource(R.drawable.chord_9th)
+                    textView.setTextColor(Color.BLACK)
+                }
+                11 -> {
+                    layout.setBackgroundResource(R.drawable.chord_11th)
+                    textView.setTextColor(Color.BLACK)
+                }
+                13 -> {
+                    layout.setBackgroundResource(R.drawable.chord_13th)
+                    textView.setTextColor(Color.BLACK)
+                }
+                else -> {
+                    layout.setBackgroundResource(R.drawable.chord_default)
+                    textView.setTextColor(Color.WHITE)
+                }
+            }
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
-        // create a new view
         val adapterLayout = LayoutInflater.from(parent.context)
             .inflate(R.layout.chord, parent, false)
 
@@ -45,29 +70,7 @@ class GridAdapter(
     }
 
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
-        holder.textView.text = dataset[position].getName()
-        when (dataset[position].getStage()) {
-            7 -> {
-                holder.layout.setBackgroundResource(R.drawable.chord_7th)
-                holder.textView.setTextColor(Color.BLACK)
-            }
-            9 -> {
-                holder.layout.setBackgroundResource(R.drawable.chord_9th)
-                holder.textView.setTextColor(Color.BLACK)
-            }
-            11 -> {
-                holder.layout.setBackgroundResource(R.drawable.chord_11th)
-                holder.textView.setTextColor(Color.BLACK)
-            }
-            13 -> {
-                holder.layout.setBackgroundResource(R.drawable.chord_13th)
-                holder.textView.setTextColor(Color.BLACK)
-            }
-            else -> {
-                holder.layout.setBackgroundResource(R.drawable.chord_default)
-                holder.textView.setTextColor(Color.WHITE)
-            }
-        }
+        holder.bind(dataset[position])
     }
 
     override fun getItemCount(): Int = dataset.size

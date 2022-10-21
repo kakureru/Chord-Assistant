@@ -58,14 +58,10 @@ class ChordsFragment : Fragment() {
         else
             offSearchMode()
         viewModel.selectedChord?.let { showChord(it) }
-        when (viewModel.instrument) {
-            Instrument.PIANO -> enablePiano()
-            Instrument.CELLO -> enableCello()
-        }
         //обработка нажатий на клавиши
         for (selectedNote in 0 until Scale.KEYS_COUNT) {
             keys[selectedNote]!!.setOnClickListener {
-                (activity as MainActivity?)?.playSound(viewModel.instrument, selectedNote)
+                (activity as MainActivity?)?.playSound(viewModel.instrument.value, selectedNote)
                 if (viewModel.isSearchMode) {
                     viewModel.onKeyPressed(selectedNote)
                     refreshPianoRoll()
@@ -200,18 +196,6 @@ class ChordsFragment : Fragment() {
      * UI
      */
 
-    fun enablePiano() {
-        viewModel.setInstrument(Instrument.PIANO)
-        binding.imageButtonPiano.alpha = 1f
-        binding.imageButtonCello.alpha = 0.5f
-    }
-
-    fun enableCello() {
-        viewModel.setInstrument(Instrument.CELLO)
-        binding.imageButtonPiano.alpha = 0.5f
-        binding.imageButtonCello.alpha = 1f
-    }
-
     private fun setSpanCount() {
         val spanCount =
             floor(mRecyclerView.width / convertDPToPixels(sColumnWidth)).toInt()
@@ -267,6 +251,6 @@ class ChordsFragment : Fragment() {
     }
 
     private fun playChord(chord: Chord) {
-        (activity as MainActivity?)?.playChord(viewModel.instrument, chord, viewModel.tonic)
+        (activity as MainActivity?)?.playChord(viewModel.instrument.value, chord, viewModel.tonic)
     }
 }
