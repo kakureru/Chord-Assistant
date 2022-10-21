@@ -30,8 +30,6 @@ class ChordsFragment : Fragment() {
     private val keys = arrayOfNulls<Button>(Scale.KEYS_COUNT) // массив клавиш
     private lateinit var gridAdapter: GridAdapter
     private lateinit var searchAdapter: GridAdapter
-    private val sColumnWidth = 78f
-    private lateinit var mRecyclerView: RecyclerView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -41,12 +39,9 @@ class ChordsFragment : Fragment() {
         binding.apply {
             tonicsScrollView.adapter =
                 TonicAdapter(Scale.TONICS) { position -> onTonicSelected(position) }
-
             chordsViewModel = viewModel
             chordsFragment = this@ChordsFragment
         }
-        mRecyclerView = binding.recyclerView
-        mRecyclerView.viewTreeObserver.addOnGlobalLayoutListener { setSpanCount() }
         return binding.root
     }
 
@@ -65,7 +60,8 @@ class ChordsFragment : Fragment() {
                 if (viewModel.isSearchMode) {
                     viewModel.onKeyPressed(selectedNote)
                     refreshPianoRoll()
-                    findChords()
+                    viewModel.findChords()
+                    searchAdapter.notifyDataSetChanged()
                 }
             }
         }
@@ -118,12 +114,6 @@ class ChordsFragment : Fragment() {
     /**
      * Search
      */
-
-    //поиск подходящих аккордов
-    private fun findChords() {
-        viewModel.findChords()
-        searchAdapter.notifyDataSetChanged()
-    }
 
     fun switchSearchMode() {
         if (viewModel.isSearchMode) {
@@ -185,29 +175,11 @@ class ChordsFragment : Fragment() {
     }
 
     /**
-     * Navigation
+     * Other
      */
 
     fun goToInfo() {
         findNavController().navigate(R.id.action_chordsFragment_to_infoFragment)
-    }
-
-    /**
-     * UI
-     */
-
-    private fun setSpanCount() {
-        val spanCount =
-            floor(mRecyclerView.width / convertDPToPixels(sColumnWidth)).toInt()
-        (mRecyclerView.layoutManager as GridLayoutManager).spanCount = spanCount
-    }
-
-    private fun convertDPToPixels(dp: Float): Float {
-        return TypedValue.applyDimension(
-            TypedValue.COMPLEX_UNIT_DIP,
-            dp,
-            resources.displayMetrics
-        )
     }
 
     //заполнение массива клавиш

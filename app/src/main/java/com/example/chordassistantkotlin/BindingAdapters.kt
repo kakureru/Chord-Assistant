@@ -1,9 +1,13 @@
 package com.example.chordassistantkotlin
 
+import android.util.TypedValue
 import android.widget.ImageButton
 import androidx.databinding.BindingAdapter
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.chordassistantkotlin.constants.Instrument
 import com.example.chordassistantkotlin.model.ChordsViewModel
+import kotlin.math.floor
 
 @BindingAdapter("android:instrument")
 fun bindInstrument(instrImageBtn: ImageButton, viewModel: ChordsViewModel) {
@@ -23,4 +27,16 @@ fun setOnInstrumentClick(instrumentImageBtn: ImageButton, viewModel: ChordsViewM
         viewModel.switchInstrument()
     }
 
+}
+
+@BindingAdapter("customSpanCount")
+fun setSpanCount(recyclerView: RecyclerView, sColumnWidth: Float) {
+    val dpInPx = TypedValue.applyDimension(
+        TypedValue.COMPLEX_UNIT_DIP,
+        sColumnWidth,
+        recyclerView.context.resources.displayMetrics
+    )
+    val spanCount =
+        floor(recyclerView.context.resources.displayMetrics.widthPixels / dpInPx).toInt()
+    (recyclerView.layoutManager as GridLayoutManager).spanCount = spanCount
 }
