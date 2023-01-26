@@ -1,7 +1,6 @@
-package com.example.chordassistantkotlin
+package com.example.chordassistantkotlin.app.view
 
 import android.os.Bundle
-import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,16 +9,13 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.example.chordassistantkotlin.adapter.GridAdapter
-import com.example.chordassistantkotlin.adapter.TonicAdapter
-import com.example.chordassistantkotlin.constants.Instrument
-import com.example.chordassistantkotlin.constants.Scale
+import com.example.chordassistantkotlin.R
+import com.example.chordassistantkotlin.app.adapter.GridAdapter
+import com.example.chordassistantkotlin.app.adapter.TonicAdapter
+import com.example.chordassistantkotlin.app.viewmodel.ChordsViewModel
+import com.example.chordassistantkotlin.domain.constants.Scale
 import com.example.chordassistantkotlin.databinding.FragmentChordsBinding
-import com.example.chordassistantkotlin.model.Chord
-import com.example.chordassistantkotlin.model.ChordsViewModel
-import kotlin.math.floor
+import com.example.chordassistantkotlin.domain.model.Chord
 
 class ChordsFragment : Fragment() {
 

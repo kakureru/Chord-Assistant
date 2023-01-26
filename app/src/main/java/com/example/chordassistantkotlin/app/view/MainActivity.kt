@@ -1,19 +1,17 @@
-package com.example.chordassistantkotlin
+package com.example.chordassistantkotlin.app.view
 
 import android.media.SoundPool
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.LiveData
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.ui.setupActionBarWithNavController
-import com.example.chordassistantkotlin.constants.Instrument
+import com.example.chordassistantkotlin.R
+import com.example.chordassistantkotlin.app.viewmodel.ChordsViewModel
+import com.example.chordassistantkotlin.domain.constants.Instrument
 import com.example.chordassistantkotlin.data.SoundDatasource
 import com.example.chordassistantkotlin.databinding.ActivityMainBinding
-import com.example.chordassistantkotlin.model.Chord
-import com.example.chordassistantkotlin.model.ChordsViewModel
+import com.example.chordassistantkotlin.domain.model.Chord
 
 class MainActivity : AppCompatActivity() {
 

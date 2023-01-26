@@ -1,4 +1,4 @@
-package com.example.chordassistantkotlin.model
+package com.example.chordassistantkotlin.domain.model
 
 class InfoElem(
     private var Header: String,

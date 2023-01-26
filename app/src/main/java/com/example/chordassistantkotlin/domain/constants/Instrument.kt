@@ -1,4 +1,4 @@
-package com.example.chordassistantkotlin.constants
+package com.example.chordassistantkotlin.domain.constants
 
 object Instrument {
     const val PIANO = 1

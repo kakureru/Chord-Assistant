@@ -1,12 +1,13 @@
-package com.example.chordassistantkotlin
+package com.example.chordassistantkotlin.app
 
 import android.util.TypedValue
 import android.widget.ImageButton
 import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.chordassistantkotlin.constants.Instrument
-import com.example.chordassistantkotlin.model.ChordsViewModel
+import com.example.chordassistantkotlin.R
+import com.example.chordassistantkotlin.app.viewmodel.ChordsViewModel
+import com.example.chordassistantkotlin.domain.constants.Instrument
 import kotlin.math.floor
 
 @BindingAdapter("android:instrument")

@@ -1,4 +1,4 @@
-package com.example.chordassistantkotlin.adapter
+package com.example.chordassistantkotlin.app.adapter
 
 import android.view.LayoutInflater
 import android.view.View

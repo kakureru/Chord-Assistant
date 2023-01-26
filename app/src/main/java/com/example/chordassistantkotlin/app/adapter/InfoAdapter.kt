@@ -1,4 +1,4 @@
-package com.example.chordassistantkotlin.adapter
+package com.example.chordassistantkotlin.app.adapter
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -8,7 +8,7 @@ import android.widget.BaseAdapter
 import android.widget.Button
 import android.widget.TextView
 import com.example.chordassistantkotlin.R
-import com.example.chordassistantkotlin.model.InfoElem
+import com.example.chordassistantkotlin.domain.model.InfoElem
 
 class InfoAdapter(
     private val context: Context? = null,

@@ -1,4 +1,4 @@
-package com.example.chordassistantkotlin.constants
+package com.example.chordassistantkotlin.domain.constants
 
 object Scale {
     const val KEYS_COUNT = 36

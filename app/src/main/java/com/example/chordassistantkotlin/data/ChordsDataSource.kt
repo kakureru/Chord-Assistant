@@ -1,6 +1,6 @@
 package com.example.chordassistantkotlin.data
 
-import com.example.chordassistantkotlin.model.Chord
+import com.example.chordassistantkotlin.domain.model.Chord
 import java.util.ArrayList
 
 object ChordsDataSource {

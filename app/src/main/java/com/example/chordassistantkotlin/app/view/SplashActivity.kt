@@ -1,4 +1,4 @@
-package com.example.chordassistantkotlin
+package com.example.chordassistantkotlin.app.view
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity

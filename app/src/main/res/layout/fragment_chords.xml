@@ -2,17 +2,17 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".ChordsFragment">
+    tools:context=".app.view.ChordsFragment">
 
     <data>
 
         <variable
             name="chordsViewModel"
-            type="com.example.chordassistantkotlin.model.ChordsViewModel" />
+            type="com.example.chordassistantkotlin.app.viewmodel.ChordsViewModel" />
 
         <variable
             name="chordsFragment"
-            type="com.example.chordassistantkotlin.ChordsFragment" />
+            type="com.example.chordassistantkotlin.app.view.ChordsFragment" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

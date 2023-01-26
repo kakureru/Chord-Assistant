@@ -1,4 +1,4 @@
-package com.example.chordassistantkotlin
+package com.example.chordassistantkotlin.app.view
 
 import android.database.sqlite.SQLiteDatabase
 import android.os.Bundle
@@ -6,10 +6,10 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.example.chordassistantkotlin.adapter.InfoAdapter
+import com.example.chordassistantkotlin.app.adapter.InfoAdapter
 import com.example.chordassistantkotlin.data.DBHelper
 import com.example.chordassistantkotlin.databinding.FragmentInfoBinding
-import com.example.chordassistantkotlin.model.InfoElem
+import com.example.chordassistantkotlin.domain.model.InfoElem
 
 class InfoFragment : Fragment() {
 

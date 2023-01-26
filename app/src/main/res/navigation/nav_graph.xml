@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/chordsFragment"
-        android:name="com.example.chordassistantkotlin.ChordsFragment"
+        android:name="com.example.chordassistantkotlin.app.view.ChordsFragment"
         android:label="fragment_chords"
         tools:layout="@layout/fragment_chords" >
         <action
@@ -16,7 +16,7 @@
     </fragment>
     <fragment
         android:id="@+id/infoFragment"
-        android:name="com.example.chordassistantkotlin.InfoFragment"
+        android:name="com.example.chordassistantkotlin.app.view.InfoFragment"
         android:label="fragment_info"
         tools:layout="@layout/fragment_info" >
         <action

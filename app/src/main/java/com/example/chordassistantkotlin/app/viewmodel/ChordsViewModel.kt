@@ -1,12 +1,11 @@
-package com.example.chordassistantkotlin.model
+package com.example.chordassistantkotlin.app.viewmodel
 
-import android.graphics.drawable.Drawable
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.chordassistantkotlin.R
-import com.example.chordassistantkotlin.constants.Instrument
+import com.example.chordassistantkotlin.domain.constants.Instrument
 import com.example.chordassistantkotlin.data.ChordsDataSource
+import com.example.chordassistantkotlin.domain.model.Chord
 
 class ChordsViewModel : ViewModel() {
 
